@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <stdlib.h>
 #include <vector>
 #include <argtable2.h>
 using namespace std;

@@ -188,7 +188,7 @@ class PPPVectorContainer : public PPPBaseTemplate<AType> {
       };
 
     void assign(const PPPVectorContainer & aSour, unsigned aStart=0, unsigned aSize=0, int aOffset=1) {
-      setObjectName(aSour.getObjectName());
+      PPPBaseObject::setObjectName(aSour.getObjectName());
       unsigned newsize = aSize;
       if(newsize == 0 && aOffset == 1)
         newsize = aSour.size()-aStart;

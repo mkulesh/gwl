@@ -2,6 +2,7 @@
 #define _UTPARSING
 
 #include <functional>
+#include <algorithm>
 #include "UToptions.h"
 
 /************************************************************************

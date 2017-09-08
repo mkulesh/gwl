@@ -67,10 +67,10 @@ template<class ATypeOpti> class PPPOptiSignal : public ATypeOpti
       // parameters
       if(!ATypeOpti::isInitialized())
         {
-        resize(_s1.points(), getModel().params());
+         ATypeOpti::resize(_s1.points(), getModel().params());
         _der.resize(ATypeOpti::params(),ATypeOpti::points());
         }
-      evalFixed((getWn().getType() == PPPApproximate::APTpolin), false, getWn().size());
+      ATypeOpti::evalFixed((getWn().getType() == PPPApproximate::APTpolin), false, getWn().size());
       };
 
     void optimization() {

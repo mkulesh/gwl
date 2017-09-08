@@ -101,7 +101,7 @@ template<class AType> class PPPSignalGen : public PPPBaseTemplate<AType>
           (_par[0]+_par[1]*e)*cos(2.0*M_PI*_par[2]*x[i]),
           (_par[3]+_par[4]*e)*sin(2.0*M_PI*_par[5]*x[i] + _par[6])
           );
-        cmplConvert(aDest(i,aNum), f);
+        PPPBaseTemplate<AType>::cmplConvert(aDest(i,aNum), f);
         }
       // Notation
       strstream str;
@@ -124,7 +124,7 @@ template<class AType> class PPPSignalGen : public PPPBaseTemplate<AType>
           _par[0]*sin(2.0*M_PI*_par[2]*x[i]+sin(_par[3]*x[i])),
           _par[1]*sin(2.0*M_PI*_par[2]*x[i])
           );
-        cmplConvert(aDest(i,aNum), f);
+        PPPBaseTemplate<AType>::cmplConvert(aDest(i,aNum), f);
         }
       // Notation
       strstream str;
@@ -150,7 +150,7 @@ template<class AType> class PPPSignalGen : public PPPBaseTemplate<AType>
           xt*cos(2.0*M_PI*_par[6]*x[i]) + yt*sin(2.0*M_PI*_par[6]*x[i]),
           -xt*sin(2.0*M_PI*_par[6]*x[i]) + yt*cos(2.0*M_PI*_par[6]*x[i])
           );
-        cmplConvert(aDest(i,aNum), f);
+        PPPBaseTemplate<AType>::cmplConvert(aDest(i,aNum), f);
         }
       // Notation
       strstream str;
@@ -232,7 +232,7 @@ template<class AType> class PPPSignalGen : public PPPBaseTemplate<AType>
       for(unsigned i=0; i<aDest.points(); i++)
         {
         PPPcomplex r = aDest(i,aNum) + PPPcomplex(m*(double)rand()/RAND_MAX-m/2.0, m*(double)rand()/RAND_MAX-m/2.0);
-        cmplConvert(aDest(i,aNum), r);
+        PPPBaseTemplate<AType>::cmplConvert(aDest(i,aNum), r);
         }
       // Notation
       strstream str;

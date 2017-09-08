@@ -279,7 +279,7 @@ template<class AType> class PPPTransFour : public PPPBaseTemplate<AType>
         for(unsigned k=0; k<aVoice.points(); k++)
           {
           sprintf(currFreq,"%s: [%d] %d",PPPTRANSFOUR_CURR,c+1,k);
-          onProgress(100*c*k/(aVoice.points()*aVoice.channels()),currFreq);
+          PPPBaseObject::onProgress(100*c*k/(aVoice.points()*aVoice.channels()),currFreq);
           PPPcomplex c2 = 0.0;
           for(unsigned j=0; j<aVoice.points(); j++)
             c2 += aVoice(j,c)*exp(PPPcomplex(0.0, (-2.0*M_PI*(double)j*(double)k)/(double)(aVoice.points())));
@@ -306,7 +306,7 @@ template<class AType> class PPPTransFour : public PPPBaseTemplate<AType>
           PPPcomplex c2 = 0.0;
           for(unsigned j=0; j<aFour.points(); j++)
             c2 += aFour(j,c)*exp(PPPcomplex(0.0, (2.0*M_PI*(double)j*(double)k)/(double)aFour.points()))/((double)aFour.points());
-          cmplConvert(aVoice(k,c),c2);
+          PPPBaseTemplate<AType>::cmplConvert(aVoice(k,c),c2);
           }
       PPPBaseTemplate<AType>::onProgress(-1,"");
       return;

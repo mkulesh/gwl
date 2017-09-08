@@ -134,7 +134,7 @@ template<class AType> class PPPTransWavelet : public PPPTransFour<AType>
         {
         bool aSaveStatus = PPPBaseTemplate<AType>::getShowMessage();
         PPPBaseTemplate<AType>::setShowMessage(false);
-        FT(aFour,aVoice);
+        PPPTransFour<AType>::FT(aFour,aVoice);
         PPPBaseTemplate<AType>::setShowMessage(aSaveStatus);
         _evalFrequencyAxis(wt, aFour.getAxis());
         }
@@ -248,7 +248,7 @@ template<class AType> class PPPTransWavelet : public PPPTransFour<AType>
             }
           s3 = s2*db/Chm;
           if(aT.getFreq().getSign()!=PPPAxis::ASfull) s3 = s3*2.0;
-          cmplConvert(aVoice(j,c),s3);
+          PPPBaseTemplate<AType>::cmplConvert(aVoice(j,c),s3);
           }
       PPPBaseTemplate<AType>::onProgress(-1,"");
       };
@@ -276,7 +276,7 @@ template<class AType> class PPPTransWavelet : public PPPTransFour<AType>
             df = fabs(aCWT.getFreq(j-1) - f);
             if(f>0.0) z1 = 1.0*aCWT(j,k,c)*df/(f*Chm);
                  else z1 = -1.0*aCWT(j,k,c)*df/(f*Chm);
-            cmplConvert(val, z1);
+            PPPBaseTemplate<AType>::cmplConvert(val, z1);
             aVoice(k,c) += val;
             }
           if(aT.getFreq().getSign()!=PPPAxis::ASfull) aVoice(k,c) = 2.0*aVoice(k,c);

@@ -176,7 +176,7 @@ template<class AType> class PPPMatrixContainer : public PPPBaseTemplate<AType>
     void assign(const PPPMatrixContainer &aSour,
       unsigned aRowStart=0, unsigned aRows=0, int aRowOffset=1,
       unsigned aColStart=0, unsigned aCols=0, int aColOffset=1) {
-      setObjectName(aSour.getObjectName());
+      PPPBaseObject::setObjectName(aSour.getObjectName());
       if(aRows != 0 && aCols != 0)
         realloc(aRows,aCols);
       else

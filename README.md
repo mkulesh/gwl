@@ -27,4 +27,7 @@ This software depends or includes the following third-party libraries or code fr
 * [C subroutine library for computing the discrete Fourier transform FFTW](http://www.fftw.org/)
 * [A graphic extension to the Qt GUI application framework QWT](https://sourceforge.net/projects/qwt/)
 
+## Supported platforms
+Currently, GWL has been tested on following platforms
+* gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-4)
 

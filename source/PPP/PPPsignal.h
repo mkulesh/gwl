@@ -403,7 +403,7 @@ template<class AType> class PPPSignalContainer : public PPPBaseTemplate<AType>
       AType p,un,qn;
       PPPcomplex z1(-0.5,-0.5), z2(0.5,0.5);
       _splineTmp.resize(count);
-      cmplConvert(qn,z1);
+      PPPBaseTemplate<AType>::cmplConvert(qn,z1);
       _splineTmp[0] = qn;
       u[0] = (3.0/(x[1]-x[0]))*((y[1]-y[0])/(x[1]-x[0])-aYp1);
       for(i=2; i<count; i++)
@@ -414,7 +414,7 @@ template<class AType> class PPPSignalContainer : public PPPBaseTemplate<AType>
         u[i-1]=(y[i]-y[i-1])/(x[i]-x[i-1]) - (y[i-1]-y[i-2])/(x[i-1]-x[i-2]);
         u[i-1]=(6.0*u[i-1]/(x[i]-x[i-2])-sig*u[i-2])/p;
         }
-      cmplConvert(qn,z2);
+      PPPBaseTemplate<AType>::cmplConvert(qn,z2);
       un = (3.0/(x[count-1]-x[count-2]))*(aYpn-(y[count-1]-y[count-2])/(x[count-1]-x[count-2]));
       _splineTmp[count-1]=(un-qn*u[count-2])/(qn*_splineTmp[count-2]+1.0);
       for (k=count-1;k>=1;k--) _splineTmp[k-1]=_splineTmp[k-1]*_splineTmp[k]+u[k-1];

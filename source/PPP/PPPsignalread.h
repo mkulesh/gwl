@@ -110,7 +110,7 @@ template<class AType> class PPPSignalRead : public PPPBaseTemplate<AType>
         {
         PPPcomplex z = (PPPBaseTemplate<AType>::isComplex())?
           PPPcomplex(func(i,_channels[0]), func(i,_channels[1])) : PPPcomplex(func(i,_channels[0]), 0.0);
-        cmplConvert(aDest(i,0), z);
+        PPPBaseTemplate<AType>::cmplConvert(aDest(i,0), z);
         }
       // Notation
       strstream str;
@@ -132,7 +132,7 @@ template<class AType> class PPPSignalRead : public PPPBaseTemplate<AType>
         {
         PPPcomplex z = (PPPBaseTemplate<AType>::isComplex())?
           PPPcomplex(func(_geophone,i,_channels[0]), func(_geophone,i,_channels[1])) : PPPcomplex(func(_geophone,i,_channels[0]), 0.0);
-        cmplConvert(aDest(i,0), z);
+        PPPBaseTemplate<AType>::cmplConvert(aDest(i,0), z);
         }
       // Notation
       strstream str;
@@ -166,7 +166,7 @@ template<class AType> class PPPSignalRead : public PPPBaseTemplate<AType>
         aDest.getAxis()[k] = (double)i/_rate;
         if(infile.channels() == 1) z = PPPcomplex(infile.getData(i),0.0);
         else { z = PPPcomplex(infile.getData(i),infile.getData(i++)); }
-        cmplConvert(aDest(k,0), z);
+        PPPBaseTemplate<AType>::cmplConvert(aDest(k,0), z);
         }
       aDest.getAxis().setParams(PPPAxis::ATlin);  
       aDest.getAxis().setObjectName(PPPSIGNALCONTAINER_AXISNAME);
@@ -226,9 +226,9 @@ template<class AType> class PPPSignalRead : public PPPBaseTemplate<AType>
       for(unsigned j=0; j<newcount; j++)
         for(unsigned i=0; i<sx.points(); i++)
           if(_channels.size() == 0)
-            cmplConvert(aDest(i,j), PPPcomplex(sx(i,j),sy(i,j)));
+            PPPBaseTemplate<AType>::cmplConvert(aDest(i,j), PPPcomplex(sx(i,j),sy(i,j)));
           else
-            cmplConvert(aDest(i,j), PPPcomplex(sx(i,_channels[j]),sy(i,_channels[j])));
+            PPPBaseTemplate<AType>::cmplConvert(aDest(i,j), PPPcomplex(sx(i,_channels[j]),sy(i,_channels[j])));
       // Notation
       strstream str;
       if(!aIsTime) str << PPPSIGNALREAD_TYPE06;

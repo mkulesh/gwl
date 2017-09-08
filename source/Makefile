@@ -45,17 +45,17 @@ make_qwt: .qwtinstalled
 	export PATH=$(OLDPATH);\
 
 make_shell:
-	cd commshell; make -f Makefile1.5.gcc shell; make -f Makefile1.5.gcc installshell;
+	cd commshell; make -f Makefile shell; make -f Makefile installshell;
 
 make_qwtplot:
-	cd commshell; make -f Makefile1.5.gcc qwtplot; make -f Makefile1.5.gcc installqwtplot;
+	cd commshell; make -f Makefile qwtplot; make -f Makefile installqwtplot;
 
 dep:
-	cd commshell; make -f Makefile1.5.gcc dep;
+	cd commshell; make -f Makefile dep;
 	
 clean:
 	rm -f .argtableisinstalled .qwtinstalled .mapminstalled .fftw3installed .utilitiesinstalled;
-	cd commshell; make -f Makefile1.5.gcc clean;
+	cd commshell; make -f Makefile clean;
 	cd ${ARGTABLEDIR}; make clean;
 	cd ${FFTW3DIR}; make clean;
-	cd ${QWTDIR}; make clean;
+#	cd ${QWTDIR}; make clean;

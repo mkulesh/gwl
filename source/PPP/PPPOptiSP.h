@@ -79,10 +79,10 @@ template<class ATypeOpti> class PPPOptiSpectrum : public ATypeOpti
       _cmplType = aCmplType;
       if(!ATypeOpti :: isInitialized())
         {
-        resize(_wg1.voices()*_wg1.points(), getModel().params());
+          ATypeOpti::resize(_wg1.voices()*_wg1.points(), getModel().params());
         _der.resize(ATypeOpti :: params(),ATypeOpti :: points());
         }
-      evalFixed((getWn().getType() == PPPApproximate::APTpolin), (_cmplType == TCarg), getWn().size());
+      ATypeOpti::evalFixed((getWn().getType() == PPPApproximate::APTpolin), (_cmplType == TCarg), getWn().size());
       };
 
     void optimization() {
