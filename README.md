@@ -14,7 +14,7 @@ M.Kulesh, M.Holschneider, M.S.Diallo (2008) *Geophysical wavelet library: Applic
 GWL includes three logical levels: the library level, the level of command line tools and the interface level:
 ![GWL Structure](https://github.com/mkulesh/gwl/blob/master/images/library_structure.png)
 
-* The main part of the library level is a C++ hierarchical object library called PPP (Parametric Processing of Pulsations). This library contains an object-based implementation of main data types and mathematical objects and implements all used algorithms. We designed PPP with the assumption that it could be potentially used outside of GWL in any other project related to the time-frequency analysis of the signals. PPP uses the C++ Standard Template Library, an ANSI C command line parser, a C subroutine library for computing the discrete Fourier transform, and Linux GUI components and utility classes (Qwt). 
+* The main part of the library level is a C++ hierarchical object library called PPP (Parametric Processing of Pulsations). This library contains an object-based implementation of main data types and mathematical objects and implements all used algorithms. We designed PPP with the assumption that it could be potentially used outside of GWL in any other project related to the time-frequency analysis of the signals. PPP uses the C++ Standard Template Library, [ANSI C command line parser Argtable2](http://argtable.sourceforge.net/), [C subroutine library for computing the discrete Fourier transform FFTW](http://www.fftw.org/), and [A graphic extension to the Qt GUI: application framework QWT](https://sourceforge.net/projects/qwt/). 
 
 * GWL command line level is a set of independent C++ modules. These modules are based on the PPP library and provide a command line interface for all methods implemented in this library. After the compilation, we obtain a set of executable modules placed in the GWL/bin directory.
 
@@ -47,13 +47,6 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.
 
 If not, see [www.gnu.org/licenses](https://www.gnu.org/licenses).
-
-## Dependencies
-
-This software depends or includes the following third-party libraries or code fragments:
-* [ANSI C command line parser Argtable2](http://argtable.sourceforge.net/)
-* [C subroutine library for computing the discrete Fourier transform FFTW](http://www.fftw.org/)
-* [A graphic extension to the Qt GUI: application framework QWT](https://sourceforge.net/projects/qwt/)
 
 ## History
 
