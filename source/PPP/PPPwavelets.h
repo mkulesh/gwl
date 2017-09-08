@@ -1,26 +1,21 @@
-/* 
- * This file is a part of GWL - Geophysical Wavelet Library
- * Copyright (C) 2007 Mikhail Kulesh and Matthias Holschneider
- *
- * This program is free software; you can redistribute it and/or modify
+/*******************************************************************************
+ * GWL - Geophysical Wavelet Library
+ * *****************************************************************************
+ * Copyright (C) 2002-2017 Mikhail Kulesh, Matthias Holschneider
+ *  
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ *  
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ *  
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * For more information please visit: http://users.math.uni-potsdam.de/~gwl
- * Email: mkulesh@math.uni-potsdam.de
- * ICQ: 103-405-403
- */
-
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 #ifndef _PPPWAVELETS
 #define _PPPWAVELETS
 
@@ -209,7 +204,8 @@ class PPPWavelet : public PPPBaseObject
       aDest.setObjectName(getObjectName());
       for(unsigned i=0; i<aTime.size(); i++) aDest[i] = evalCmplTime(aTime[i]);
       };
-
+
+
     void evalTimeRepresentation(PPPSignalContainer<PPPcomplex> &aDest, PPPAxis &aTime) {
       aDest.prepare(aTime.size(), 1, aTime, getObjectName());
       evalTimeRepresentation(aDest.getChannel(0), aTime);
@@ -220,7 +216,8 @@ class PPPWavelet : public PPPBaseObject
       aDest.setObjectName(getObjectName());
       for(unsigned i=0; i<aFreq.size(); i++) aDest[i] = evalCmplFreq(aFreq[i]);
       };
-
+
+
     void evalFreqRepresentation(PPPSignalContainer<PPPcomplex> &aDest, PPPAxis &aFreq) {
       aDest.prepare(aFreq.size(), 1, aFreq, getObjectName());
       evalFreqRepresentation(aDest.getChannel(0), aFreq);
