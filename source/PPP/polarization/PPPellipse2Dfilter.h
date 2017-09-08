@@ -30,72 +30,104 @@
  * PPPEllipse2Dfilter
  ************************************************************************/
 class PPPEllipse2Dfilter : public PPPBaseObject
-  {
-  public:
+{
+public:
+    
+    typedef enum
+    {
+        TRFLinHor, TRFLinVert, TRFElliHor, TRFElliVert, TRFLinHorS
+    } FilterType;
 
-    typedef enum {TRFLinHor, TRFLinVert, TRFElliHor, TRFElliVert, TRFLinHorS} FilterType;
+private:
 
-  private:
-    FilterType          _type;
-    double              _tilt, _ratio;
-    PPPellipse2Dratio   _compRatio;
-    PPPellipse2Dtilt    _compTilt;
+    FilterType _type;
+    double _tilt, _ratio;
+    PPPellipse2Dratio _compRatio;
+    PPPellipse2Dtilt _compTilt;
 
-  public:
-    PPPEllipse2Dfilter(FilterType aType,double aTilt,double aRatio) {
-      setObjectName(PPPELLIPSE2DFILTER_NAME);
-      _type = aType;
-      _tilt = aTilt;
-      _ratio = aRatio;
-      };
+public:
 
-    friend ostream& operator << (ostream& aDest, FilterType aSour) {
-      switch(aSour)
+    PPPEllipse2Dfilter (FilterType aType, double aTilt, double aRatio)
+    {
+        setObjectName(PPPELLIPSE2DFILTER_NAME);
+        _type = aType;
+        _tilt = aTilt;
+        _ratio = aRatio;
+    }
+    
+    friend ostream& operator << (ostream& aDest, FilterType aSour)
+    {
+        switch (aSour)
         {
-        case PPPEllipse2Dfilter::TRFLinHor:    aDest << PPPELLIPSE2DFILTER_LINHOR; break;
-        case PPPEllipse2Dfilter::TRFLinVert:   aDest << PPPELLIPSE2DFILTER_LINVERT; break;
-        case PPPEllipse2Dfilter::TRFElliHor:   aDest << PPPELLIPSE2DFILTER_ELLIHOR; break;
-        case PPPEllipse2Dfilter::TRFElliVert:  aDest << PPPELLIPSE2DFILTER_ELLIVERT; break;
-        case PPPEllipse2Dfilter::TRFLinHorS:   aDest << PPPELLIPSE2DFILTER_LINHORS; break;
+        case PPPEllipse2Dfilter::TRFLinHor:
+            aDest << PPPELLIPSE2DFILTER_LINHOR;
+            break;
+        case PPPEllipse2Dfilter::TRFLinVert:
+            aDest << PPPELLIPSE2DFILTER_LINVERT;
+            break;
+        case PPPEllipse2Dfilter::TRFElliHor:
+            aDest << PPPELLIPSE2DFILTER_ELLIHOR;
+            break;
+        case PPPEllipse2Dfilter::TRFElliVert:
+            aDest << PPPELLIPSE2DFILTER_ELLIVERT;
+            break;
+        case PPPEllipse2Dfilter::TRFLinHorS:
+            aDest << PPPELLIPSE2DFILTER_LINHORS;
+            break;
         }
-      return aDest;
-      };
-
-    const char *getInfo(void) {
-      strstream str;
-      str << getType() << ": " << PPPELLIPSE_TILT << "=" << getTilt() << ", " << PPPELLIPSE_RATIO << "=" << getRatio() << ends;
-      onNotation(str.str());
-      return getNotation();
-      };
-
-    inline FilterType getType() { return _type; };
-    inline double getTilt() { return _tilt; };
-    inline double getRatio() { return _ratio; };
-
-    bool isContent(PPPellipse2D &aVal) {
-      double ratio = _compRatio(aVal);
-      double tilt = fabs(_compTilt(aVal));
-      switch(getType())
+        return aDest;
+    }
+    
+    const char *getInfo (void)
+    {
+        strstream str;
+        str << getType() << ": " << PPPELLIPSE_TILT << "=" << getTilt() << ", " << PPPELLIPSE_RATIO
+        << "=" << getRatio() << ends;
+        onNotation(str.str());
+        return getNotation();
+    }
+    
+    inline FilterType getType ()
+    {
+        return _type;
+    }
+    
+    inline double getTilt ()
+    {
+        return _tilt;
+    }
+    
+    inline double getRatio ()
+    {
+        return _ratio;
+    }
+    
+    bool isContent (PPPellipse2D &aVal)
+    {
+        double ratio = _compRatio(aVal);
+        double tilt = fabs(_compTilt(aVal));
+        switch (getType())
         {
         case TRFLinHor:
-             if((ratio<(1.0-getRatio()) && ratio>getRatio()) || tilt>getTilt()) return false;
-             break;
+            if ((ratio < (1.0 - getRatio()) && ratio > getRatio()) || tilt > getTilt()) return false;
+            break;
         case TRFLinVert:
-             if((ratio<(1.0-getRatio()) && ratio>getRatio()) || tilt<getTilt()) return false;
-             break;
+            if ((ratio < (1.0 - getRatio()) && ratio > getRatio()) || tilt < getTilt()) return false;
+            break;
         case TRFElliHor:
-             if((ratio<getRatio() || ratio>1.0-getRatio()) || tilt>getTilt()) return false;
-             break;
+            if ((ratio < getRatio() || ratio > 1.0 - getRatio()) || tilt > getTilt()) return false;
+            break;
         case TRFElliVert:
-             if((ratio<getRatio() || ratio>1.0-getRatio()) || tilt<getTilt()) return false;
-             break;
+            if ((ratio < getRatio() || ratio > 1.0 - getRatio()) || tilt < getTilt()) return false;
+            break;
         case TRFLinHorS:
-             if(fabs(ratio)>fabs(getRatio()) || fabs(tilt)>fabs(getTilt())) return false;
-             break;
+            if (fabs(ratio) > fabs(getRatio()) || fabs(tilt) > fabs(getTilt())) return false;
+            break;
         }
-      return true;
-      };
-
-  };  // end of object
+        return true;
+    }
+    
+};
+// end of object
 
 #endif

@@ -23,46 +23,56 @@
  * PPPApproximateVel
  ***********************************************************************/
 class PPPApproximateVel : public PPPApproximate
-  {
-  public:
-
-    PPPApproximateVel(unsigned aSize) {
-      setObjectName(PPPAPPROXIMATE_VEL);
-      _type = APTvel;
-      if(aSize != 3) onError(ARG_VALUE+string("PPPApproximateVel"));
-      _params.resize(aSize);
-      };
-
-    const char *getInfo(void) {
-      strstream str;
-      str << "Func(f) = f/VSp(f), FuncDiv(f)=1.0/VSg(f), VSp(f) = a1 + a2*exp(-f*f/(a3*a3))" << endl;
-      str << "  a[i] = " << _params.vectorToStr() << ends;
-      onNotation(str.str());
-      return getNotation();
-      };
-
-    double Func(double f) {
-      double Vp = _params[0] + _params[1]*exp(-f*f/(_params[2]*_params[2]));
-      return f/Vp;
-      };
-
-    double FuncDivX(double f) {
-      double Vp = _params[0] + _params[1]*exp(-f*f/(_params[2]*_params[2]));
-      double Vg = Vp*Vp/(Vp + 2.0*f*f*_params[1]*exp(-f*f/(_params[2]*_params[2]))/(_params[2]*_params[2]));
-      return 1.0/Vg;
-      };
-
-    double FuncDivXPar(double f, unsigned Ai) {
-      onError(VIRT_NOTDEF+string("FuncDivXPar"));
-      return 0.0;
-      };
-
-    double FuncDivPar(double f, unsigned Ai) {
-      onError(VIRT_NOTDEF+string("FuncDivPar"));
-      return 0.0;
-      };
-	
-  }; // end of object
-
+{
+public:
+    
+    PPPApproximateVel (unsigned aSize)
+    {
+        setObjectName (PPPAPPROXIMATE_VEL);
+        _type = APTvel;
+        if (aSize != 3) onError(ARG_VALUE + string("PPPApproximateVel"));
+        _params.resize(aSize);
+    }
+    
+    const char *getInfo (void)
+    {
+        strstream str;
+        str << "Func(f) = f/VSp(f), FuncDiv(f)=1.0/VSg(f), VSp(f) = a1 + a2*exp(-f*f/(a3*a3))"
+        << endl;
+        str << "  a[i] = " << _params.vectorToStr() << ends;
+        onNotation(str.str());
+        return getNotation();
+    }
+    
+    double Func (double f)
+    {
+        double Vp = _params[0] + _params[1] * exp(-f * f / (_params[2] * _params[2]));
+        return f / Vp;
+    }
+    
+    double FuncDivX (double f)
+    {
+        double Vp = _params[0] + _params[1] * exp(-f * f / (_params[2] * _params[2]));
+        double Vg =
+                Vp * Vp / (Vp
+                        + 2.0 * f * f * _params[1] * exp(-f * f / (_params[2] * _params[2])) / (_params[2]
+                                * _params[2]));
+        return 1.0 / Vg;
+    }
+    
+    double FuncDivXPar (double f, unsigned Ai)
+    {
+        onError(VIRT_NOTDEF + string("FuncDivXPar"));
+        return 0.0;
+    }
+    
+    double FuncDivPar (double f, unsigned Ai)
+    {
+        onError(VIRT_NOTDEF + string("FuncDivPar"));
+        return 0.0;
+    }
+    
+};
+// end of object
 
 #endif

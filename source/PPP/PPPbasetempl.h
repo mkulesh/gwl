@@ -30,63 +30,79 @@
 #define PPPBASETEMPLATE_FREECODE   ""
 
 #ifdef __BCPLUSPLUS__
-  #define TEMPLNULLVALUE NULL
+#define TEMPLNULLVALUE NULL
 #else
-  #define TEMPLNULLVALUE 0
+#define TEMPLNULLVALUE 0
 #endif
 
 /************************************************************************
  * PPPBaseTemplate
  ************************************************************************/
 template<class AType> class PPPBaseTemplate : public PPPBaseObject
-  {
-  public:
-    PPPBaseTemplate(void) {
-      };
+{
+public:
 
-    const char *getTypeName(void) {
-      PPPNullTransform<AType> trans;
-      return trans.getComponentName();
-      };
-
-    AType nullValue(void) {
-      return (AType) TEMPLNULLVALUE;
-      };
-
-    bool isInteger(void) {
-      return (sizeof(AType)==sizeof(int));
-      };
-
-    bool isReal(void) {
-      return (sizeof(AType)==sizeof(double));
-      };
-
-    bool isComplex(void) {
-      return (sizeof(AType)==sizeof(PPPcomplex));
-      };
-
-    double getComponent(PPPcomplex const &aVal, unsigned const aC)  {
-      switch(aC) {
-        case TCre:   return real(aVal);
-        case TCim:   return imag(aVal);
-        case TCabs:  return abs(aVal);
-        case TCarg:  return arg(aVal);
-        default: onError(PPPBASETEMPLATE_ERR+string("getComponent"));
+    PPPBaseTemplate (void)
+    {
+    }
+    
+    const char *getTypeName (void)
+    {
+        PPPNullTransform<AType> trans;
+        return trans.getComponentName();
+    }
+    
+    AType nullValue (void)
+    {
+        return (AType) TEMPLNULLVALUE;
+    }
+    
+    bool isInteger (void)
+    {
+        return (sizeof(AType) == sizeof(int));
+    }
+    
+    bool isReal (void)
+    {
+        return (sizeof(AType) == sizeof(double));
+    }
+    
+    bool isComplex (void)
+    {
+        return (sizeof(AType) == sizeof(PPPcomplex));
+    }
+    
+    double getComponent (PPPcomplex const &aVal, unsigned const aC)
+    {
+        switch (aC)
+        {
+        case TCre:
+            return real(aVal);
+        case TCim:
+            return imag(aVal);
+        case TCabs:
+            return abs(aVal);
+        case TCarg:
+            return arg(aVal);
+        default:
+            onError(PPPBASETEMPLATE_ERR + string("getComponent"));
         }
-      return 0;
-      };
-
-    void cmplConvert(double &aVal, PPPcomplex const &aCmpl) {
-      aVal = real(aCmpl);
-      };
-
-    void cmplConvert(PPPcomplex &aVal, PPPcomplex const &aCmpl) {
-      aVal = aCmpl;
-      };
-
-  }; // end of object
+        return 0;
+    }
+    
+    void cmplConvert (double &aVal, PPPcomplex const &aCmpl)
+    {
+        aVal = real(aCmpl);
+    }
+    
+    void cmplConvert (PPPcomplex &aVal, PPPcomplex const &aCmpl)
+    {
+        aVal = aCmpl;
+    }
+    
+};
+// end of object
 
 #undef TEMPLNULLVALUE
 #endif
-
 

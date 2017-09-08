@@ -23,58 +23,70 @@
  * PPPWaveletShanon
  ***********************************************************************/
 class PPPWaveletShanon : public PPPWavelet
-  {
-  private:
-
+{
+private:
+    
     double _sigma;  // wavelet parameter
+    
+public:
+    
+    PPPWaveletShanon (double sigma = 1.0, double freq = 1.0, double pos = 0.0)
+    {
+        _type = CWshanon;
+        setObjectName (PPPWAVELETS_SHANON);
+        setFrequency(freq);
+        setPosition(pos);
+        _sigma = sigma;
+        _f0 = 1.0;
+    }
+    
+    void setFrequencyResolution (double dfreq)
+    {
+        _sigma = 1.0 / dfreq;
+    }
+    
+private:
+    
+    double evalRealTime (double r) const
+    {
+        if (r == 0.0) return _sigma;
+        return cos(2.0 * M_PI * r) * sin(M_PI * _sigma * r) / (M_PI * r);
+    }
+    
+    double evalImagTime (double r) const
+    {
+        if (r == 0.0) return 0.0;
+        return sin(2.0 * M_PI * r) * sin(M_PI * _sigma * r) / (M_PI * r);
+    }
+    
+    double evalRealFreq (double om) const
+    {
+        return (H(om - 2.0 * M_PI + _sigma * M_PI) - H(om - 2.0 * M_PI - _sigma * M_PI));
+    }
+    
+    double evalImagFreq (double om) const
+    {
+        return 0.0;
+    }
+    
+    double getCutoffTime (double eps) const
+    {
+        return 1.0 / (M_PI * eps);
+    }
+    
+    double getCutoffFreq (double eps) const
+    {
+        return _sigma * M_PI;
+    }
+    
+    /* Heaviside step function */
+    inline double H (double w) const
+    {
+        return ((w > 0.0) ? 1.0 : 0.0);
+    }
 
-  public:
-
-    PPPWaveletShanon(double sigma=1.0, double freq=1.0, double pos=0.0) {
-      _type = CWshanon;
-      setObjectName(PPPWAVELETS_SHANON);
-      setFrequency(freq);
-      setPosition(pos);
-      _sigma = sigma;
-      _f0 = 1.0;
-      };
-
-    void setFrequencyResolution(double dfreq) {
-      _sigma = 1.0/dfreq;
-      };
-
-  private:
-
-    double evalRealTime(double r) const {
-      if(r == 0.0) return _sigma;
-      return cos(2.0*M_PI*r)*sin(M_PI*_sigma*r)/(M_PI*r);
-      };
-
-    double evalImagTime(double r) const {
-      if(r == 0.0) return 0.0;
-      return sin(2.0*M_PI*r)*sin(M_PI*_sigma*r)/(M_PI*r);
-      };
-
-    double evalRealFreq(double om) const {
-      return (H(om-2.0*M_PI+_sigma*M_PI) - H(om-2.0*M_PI-_sigma*M_PI));
-      };
-
-    double evalImagFreq(double om) const {
-      return 0.0;
-      };
-
-    double getCutoffTime(double eps) const {
-      return 1.0/(M_PI*eps);
-      };
-
-    double getCutoffFreq(double eps) const {
-      return _sigma*M_PI;
-      };
-
-    inline double H(double w) const { return ((w>0.0) ? 1.0 : 0.0); }; /* Heaviside step function */
-
-  }; // end of object
-
+};
+// end of object
 
 #endif
 

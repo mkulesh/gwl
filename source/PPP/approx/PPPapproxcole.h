@@ -25,107 +25,128 @@
  * Y.Wang, J.Guo, Modifed Kolsky model for seismic attenuation and dispersion.
  * J.Geophys.E., No. 1 (2004), 187-196
  ***********************************************************************/
- class PPPApproximateColeCole : public PPPApproximate
-  {
-  private:
+class PPPApproximateColeCole : public PPPApproximate
+{
+private:
+    
     PPPcomplex j;
 
-  public:
-
-    PPPApproximateColeCole(void) {
-      setObjectName(PPPAPPROXIMATE_COL);
-      _type = APTcolecole;
-      j = PPPcomplex(0.0, 1.0);
-      };
-
-    inline PPPcomplex CmplPhase(double om) {
-      PPPcomplex M = _params[0]*(1.0+pow(j*om*_params[2], _params[1]))/(1.0+pow(j*om*_params[3], _params[1]));
-      return om/sqrt(M);
-      };
-
-    inline PPPcomplex CmplPhasePrim(double om) {
-      PPPcomplex M = _params[0]*(1.0+pow(j*om*_params[2], _params[1]))/(1.0+pow(j*om*_params[3], _params[1]));
-      PPPcomplex Mprim = (_params[0]*_params[1]/om)*
-         (pow(j*om*_params[2], _params[1])-pow(j*om*_params[3], _params[1]))/
-         ((1.0+pow(j*om*_params[3], _params[1]))*(1.0+pow(j*om*_params[3], _params[1])));
-      return (1.0/sqrt(M))*(1.0-om*Mprim/(2.0*M));
-      };
-
-  }; // end of object
-
+public:
+    
+    PPPApproximateColeCole (void)
+    {
+        setObjectName (PPPAPPROXIMATE_COL);
+        _type = APTcolecole;
+        j = PPPcomplex(0.0, 1.0);
+    }
+    
+    inline PPPcomplex CmplPhase (double om)
+    {
+        PPPcomplex M = _params[0] * (1.0 + pow(j * om * _params[2], _params[1]))
+                / (1.0 + pow(j * om * _params[3], _params[1]));
+        return om / sqrt(M);
+    }
+    
+    inline PPPcomplex CmplPhasePrim (double om)
+    {
+        PPPcomplex M = _params[0] * (1.0 + pow(j * om * _params[2], _params[1]))
+                / (1.0 + pow(j * om * _params[3], _params[1]));
+        PPPcomplex Mprim = (_params[0] * _params[1] / om)
+                * (pow(j * om * _params[2], _params[1]) - pow(j * om * _params[3], _params[1]))
+                           / ((1.0 + pow(j * om * _params[3], _params[1])) * (1.0
+                                   + pow(j * om * _params[3], _params[1])));
+        return (1.0 / sqrt(M)) * (1.0 - om * Mprim / (2.0 * M));
+    }
+    
+};
+// end of object
 
 class PPPApproximateColeColePhi : public PPPApproximateColeCole
-  {
-  public:
-
-    PPPApproximateColeColePhi(unsigned aSize) {
-      if(aSize != 4) onError(ARG_VALUE+string("PPPApproximateColeColePhi"));
-      _params.resize(aSize);
-      };
-
-    const char *getInfo(void) {
-      strstream str;
-      str << "Func(f) = real(om/sqrt[a0*(1+(j*om*a2)^a1)/(1+(j*om*a3)^a1)])" << endl;
-      str << "  a[i] = " << _params.vectorToStr() << ends;
-      onNotation(str.str());
-      return getNotation();
-      };
-
-    double Func(double f) {
-      return real(CmplPhase(2.0*M_PI*f))/(2.0*M_PI);
-      };
-
-    double FuncDivX(double f) {
-      return real(CmplPhasePrim(2.0*M_PI*f));
-      };
-
-    double FuncDivXPar(double f, unsigned Ai) {
-      onError(VIRT_NOTDEF+string("FuncDivXPar"));
-      return 0.0;
-      };
-
-    double FuncDivPar(double f, unsigned Ai) {
-      onError(VIRT_NOTDEF+string("FuncDivPar"));
-      return 0.0;
-      };
-
-  }; // end of object
+{
+public:
+    
+    PPPApproximateColeColePhi (unsigned aSize)
+    {
+        if (aSize != 4) onError(ARG_VALUE + string("PPPApproximateColeColePhi"));
+        _params.resize(aSize);
+    }
+    
+    const char *getInfo (void)
+    {
+        strstream str;
+        str << "Func(f) = real(om/sqrt[a0*(1+(j*om*a2)^a1)/(1+(j*om*a3)^a1)])" << endl;
+        str << "  a[i] = " << _params.vectorToStr() << ends;
+        onNotation(str.str());
+        return getNotation();
+    }
+    
+    double Func (double f)
+    {
+        return real(CmplPhase(2.0 * M_PI * f)) / (2.0 * M_PI);
+    }
+    
+    double FuncDivX (double f)
+    {
+        return real(CmplPhasePrim(2.0 * M_PI * f));
+    }
+    
+    double FuncDivXPar (double f, unsigned Ai)
+    {
+        onError(VIRT_NOTDEF + string("FuncDivXPar"));
+        return 0.0;
+    }
+    
+    double FuncDivPar (double f, unsigned Ai)
+    {
+        onError(VIRT_NOTDEF + string("FuncDivPar"));
+        return 0.0;
+    }
+    
+};
+// end of object
 
 class PPPApproximateColeColeAtn : public PPPApproximateColeCole
-  {
-  public:
-
-    PPPApproximateColeColeAtn(unsigned aSize) {
-      if(aSize != 4) onError(ARG_VALUE+string("PPPApproximateColeColeAtn"));
-      _params.resize(aSize);
-      };
-
-    const char *getInfo(void) {
-      strstream str;
-      str << "Func(f) = imag(om/sqrt[a0*(1+(j*om*a2)^a1)/(1+(j*om*a3)^a1)])" << endl;
-      str << "  a[i] = " << _params.vectorToStr() << ends;
-      onNotation(str.str());
-      return getNotation();
-      };
-
-    double Func(double f) {
-      return -1.0*imag(CmplPhase(2.0*M_PI*f));
-      };
-
-    double FuncDivX(double f) {
-      return -2.0*M_PI*imag(CmplPhasePrim(2.0*M_PI*f));
-      };
-
-    double FuncDivXPar(double f, unsigned Ai) {
-      onError(VIRT_NOTDEF+string("FuncDivXPar"));
-      return 0.0;
-      };
-
-    double FuncDivPar(double f, unsigned Ai) {
-      onError(VIRT_NOTDEF+string("FuncDivPar"));
-      return 0.0;
-      };
-
-  }; // end of object
+{
+public:
+    
+    PPPApproximateColeColeAtn (unsigned aSize)
+    {
+        if (aSize != 4) onError(ARG_VALUE + string("PPPApproximateColeColeAtn"));
+        _params.resize(aSize);
+    }
+    
+    const char *getInfo (void)
+    {
+        strstream str;
+        str << "Func(f) = imag(om/sqrt[a0*(1+(j*om*a2)^a1)/(1+(j*om*a3)^a1)])" << endl;
+        str << "  a[i] = " << _params.vectorToStr() << ends;
+        onNotation(str.str());
+        return getNotation();
+    }
+    
+    double Func (double f)
+    {
+        return -1.0 * imag(CmplPhase(2.0 * M_PI * f));
+    }
+    
+    double FuncDivX (double f)
+    {
+        return -2.0 * M_PI * imag(CmplPhasePrim(2.0 * M_PI * f));
+    }
+    
+    double FuncDivXPar (double f, unsigned Ai)
+    {
+        onError(VIRT_NOTDEF + string("FuncDivXPar"));
+        return 0.0;
+    }
+    
+    double FuncDivPar (double f, unsigned Ai)
+    {
+        onError(VIRT_NOTDEF + string("FuncDivPar"));
+        return 0.0;
+    }
+    
+};
+// end of object
 
 #endif

@@ -23,52 +23,59 @@
  * PPPWaveletHaar
  ***********************************************************************/
 class PPPWaveletHaar : public PPPWavelet
-  {
-  public:
-
-    PPPWaveletHaar(double freq=1.0, double pos=0.0) {
-      _type = CWhaar;
-      setObjectName(PPPWAVELETS_HAAR);
-      setFrequency(freq);
-      setPosition(pos);
-      _f0 = 0.75971;
-      };
-
-  private:
-
-    double evalRealTime(double r) const {
-      if(r<-0.5 || r>0.5 || r==0.0) return 0.0;
-      if(r<0.0) return -1.0;
-      return 1.0;
-      };
-
-    double evalImagTime(double r) const {
-      return 0.0;
-      };
-
-    double evalRealFreq(double om) const {
-      return 0.0;
-      };
-
-    double evalImagFreq(double om) const {
-      return (om==0.0)? 0.0 : (2.0/om)*(cos(om/2.0)-1.0);
-      };
-     
-    double getCutoffTime(double eps) const {
-      return 0.5;
-      };
-
-    double getCutoffFreq(double eps) const {
-      return 4.0/eps;
-      };
-
-    double evalMaxAmplitude(void) const {
-      return fabs(_freq);
-      };
-
-  }; // end of object
-
-
+{
+public:
+    
+    PPPWaveletHaar (double freq = 1.0, double pos = 0.0)
+    {
+        _type = CWhaar;
+        setObjectName (PPPWAVELETS_HAAR);
+        setFrequency(freq);
+        setPosition(pos);
+        _f0 = 0.75971;
+    }
+    
+private:
+    
+    double evalRealTime (double r) const
+    {
+        if (r < -0.5 || r > 0.5 || r == 0.0) return 0.0;
+        if (r < 0.0) return -1.0;
+        return 1.0;
+    }
+    
+    double evalImagTime (double r) const
+    {
+        return 0.0;
+    }
+    
+    double evalRealFreq (double om) const
+    {
+        return 0.0;
+    }
+    
+    double evalImagFreq (double om) const
+    {
+        return (om == 0.0) ? 0.0 : (2.0 / om) * (cos(om / 2.0) - 1.0);
+    }
+    
+    double getCutoffTime (double eps) const
+    {
+        return 0.5;
+    }
+    
+    double getCutoffFreq (double eps) const
+    {
+        return 4.0 / eps;
+    }
+    
+    double evalMaxAmplitude (void) const
+    {
+        return fabs(_freq);
+    }
+    
+};
+// end of object
 
 #endif
 

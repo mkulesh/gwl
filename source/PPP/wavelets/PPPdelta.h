@@ -23,35 +23,39 @@
  * PPPWaveletDelta
  ***********************************************************************/
 class PPPWaveletDelta : public PPPWavelet
-  {
-  public:
-
-    PPPWaveletDelta(void) {
-      _type=CWdelta;
-      setObjectName(PPPWAVELETS_DELTA);
-      };
-
-  private:
-
-    double evalRealTime(double r) const {
-      return (r == 0.0) ? 1.0/_freq : 0.0;
-      };
-
-    double evalImagTime(double r) const {
-      return 0.0;
-      };
-
-    double evalRealFreq(double om) const {
-      return 1.0/sqrt(2.0*M_PI);
-      };
-
-    double evalImagFreq(double om) const {
-      return 0.0;
-      };
-
-  }; // end of object
-
-
+{
+public:
+    
+    PPPWaveletDelta (void)
+    {
+        _type = CWdelta;
+        setObjectName (PPPWAVELETS_DELTA);
+    }
+    
+private:
+    
+    double evalRealTime (double r) const
+    {
+        return (r == 0.0) ? 1.0 / _freq : 0.0;
+    }
+    
+    double evalImagTime (double r) const
+    {
+        return 0.0;
+    }
+    
+    double evalRealFreq (double om) const
+    {
+        return 1.0 / sqrt(2.0 * M_PI);
+    }
+    
+    double evalImagFreq (double om) const
+    {
+        return 0.0;
+    }
+    
+};
+// end of object
 
 #endif
 

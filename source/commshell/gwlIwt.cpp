@@ -18,24 +18,27 @@
  ******************************************************************************/
 #include "gwlMainObject.h"
 
-typedef gwlMainObject< PPPSpectrContainer<PPPcomplex>, PPPSignalContainer<double> > gwlMainDouble;
-typedef gwlMainObject< PPPSpectrContainer<PPPcomplex>, PPPSignalContainer<PPPcomplex> > gwlMainCmpl;
+typedef gwlMainObject<PPPSpectrContainer<PPPcomplex>, PPPSignalContainer<double> > gwlMainDouble;
+typedef gwlMainObject<PPPSpectrContainer<PPPcomplex>, PPPSignalContainer<PPPcomplex> > gwlMainCmpl;
 
-template<class AType,class ATypeMain> class gwlMain : public ATypeMain
-  {
-  private:
-    UTOption_str        o_name;
-    UTOption_lit        o_ampl;
-    UTOption_dbl        o_cutoff;
+template<class AType, class ATypeMain> class gwlMain : public ATypeMain
+{
+private:
 
-  public:
+    UTOption_str o_name;
+    UTOption_lit o_ampl;
+    UTOption_dbl o_cutoff;
 
-    gwlMain(const char *aAppName, const char *aModName, const char *aDefIn, const char *aDefOut):
-      ATypeMain(aAppName, aModName, aDefIn, aDefOut),
-      o_name   ("n",  "name",    "<str>", "name of the inverse signal (by default 'inverse signal')", "inverse signal"),
-      o_ampl   ("a",  "ampl",    "if set, calculate inverse amplitude constant", false),
-      o_cutoff ("u", "cutoff",  "<real>", "wavelet cutoff for slow inverse wavelet transform (by default 0.01)", 0.01)
-        {
+public:
+    
+    gwlMain (const char *aAppName, const char *aModName, const char *aDefIn, const char *aDefOut) :
+            ATypeMain(aAppName, aModName, aDefIn, aDefOut),
+            o_name("n", "name", "<str>", "name of the inverse signal (by default 'inverse signal')",
+                   "inverse signal"),
+            o_ampl("a", "ampl", "if set, calculate inverse amplitude constant", false),
+            o_cutoff("u", "cutoff", "<real>",
+                     "wavelet cutoff for slow inverse wavelet transform (by default 0.01)", 0.01)
+    {
         ATypeMain::o_parser.add(ATypeMain::o_nomess);
         ATypeMain::o_parser.add(ATypeMain::o_progr);
         ATypeMain::o_parser.add(ATypeMain::o_infile);
@@ -47,42 +50,40 @@ template<class AType,class ATypeMain> class gwlMain : public ATypeMain
         ATypeMain::o_parser.add(ATypeMain::o_wavpar);
         ATypeMain::o_parser.add(o_ampl);
         ATypeMain::o_parser.add(o_cutoff);
-        };
-
-    void calc(void) {
-      // prepare transform parameters
-      ATypeMain::aSpectrumPar.setInverseParams(
-        ATypeMain::o_wavelet.getValue(),
-        ATypeMain::o_wavpar.getValue(),
-        o_cutoff.getValue());
-      // calculation of inverse signal
-      PPPTransWavelet<AType>  trans;
-      trans.setShowProgress(ATypeMain::o_progr.getValue());
-      trans.IWT(ATypeMain::aDest,ATypeMain::aSource,ATypeMain::aSpectrumPar,o_ampl.isOptionGiven());
-      ATypeMain::aDest.setObjectName(o_name.getValue());
-      strstream str2;
-      str2 << ATypeMain::aDest.getInfo() << ends;
-      PPPBaseObject :: onMessage(str2.str());
-      };
-
-  };  // end of object
-
-
-main(int  argc, char **argv)
-  {
-  gwlMain<double,gwlMainDouble> WT1("Inverse wavelet transform","gwlIwt","spectr.dat","signal.dat");
-  WT1.parse(argc, argv);
-  ConApplication.onMessage(ConApplication.getAppName());
-  if(WT1.isComplex())
-    {
-    gwlMain<PPPcomplex,gwlMainCmpl> WT2("Inverse wavelet transform","gwlIwt","spectr.dat","signal.dat");
-    WT2.parse(argc, argv);
-    WT2.evaluate();
     }
-  else WT1.evaluate();
-  return 0;
-  }
+    
+    void calc (void)
+    {
+        // prepare transform parameters
+        ATypeMain::aSpectrumPar.setInverseParams(ATypeMain::o_wavelet.getValue(),
+                                                 ATypeMain::o_wavpar.getValue(),
+                                                 o_cutoff.getValue());
+        // calculation of inverse signal
+        PPPTransWavelet<AType> trans;
+        trans.setShowProgress(ATypeMain::o_progr.getValue());
+        trans.IWT(ATypeMain::aDest, ATypeMain::aSource, ATypeMain::aSpectrumPar,
+                  o_ampl.isOptionGiven());
+        ATypeMain::aDest.setObjectName(o_name.getValue());
+        strstream str2;
+        str2 << ATypeMain::aDest.getInfo() << ends;
+        PPPBaseObject::onMessage(str2.str());
+    }
+    
+};
+// end of object
 
-
-
+main(int argc, char **argv)
+{   
+    gwlMain<double,gwlMainDouble> WT1("Inverse wavelet transform","gwlIwt","spectr.dat","signal.dat");
+    WT1.parse(argc, argv);
+    ConApplication.onMessage(ConApplication.getAppName());
+    if(WT1.isComplex())
+    {   
+        gwlMain<PPPcomplex,gwlMainCmpl> WT2("Inverse wavelet transform","gwlIwt","spectr.dat","signal.dat");
+        WT2.parse(argc, argv);
+        WT2.evaluate();
+    }
+    else WT1.evaluate();
+    return 0;
+}
 

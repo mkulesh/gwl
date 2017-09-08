@@ -23,23 +23,60 @@
  * PPPNullTransform
  ************************************************************************/
 template<class T> class PPPNullTransform : public unary_function<T, T>
-  {
-  public:
-    inline T const &operator()(T const &aVal) const { return aVal; };
-    const char* getComponentName(int const &aVal) { return PPPBASETEMPLATE_INT; };
-    const char* getComponentName(double const &aVal) { return PPPBASETEMPLATE_REAL; };
-    const char* getComponentName(long double const &aVal) { return PPPBASETEMPLATE_LREAL; };
-    const char* getComponentName(PPPcomplex const &aVal) { return PPPBASETEMPLATE_CMPL; };
-    const char* getComponentName(PPPellipse2D const &aVal) { return PPPBASETEMPLATE_EPAR2D; };
-    const char* getComponentName(PPPellipse3D const &aVal) { return PPPBASETEMPLATE_EPAR3D; };
-    const char *getComponentCode(void) { return PPPBASETEMPLATE_FREECODE; };
-    #ifdef PPPCONF_USEMAPM
-    const char* getComponentName(MAPM const &aVal) { return PPPBASETEMPLATE_MAPM; };
-    #endif
-    const char *getComponentName(void) {
-      T testval;
-      return getComponentName(testval);
-      };
-  }; // end of object
+{
+public:
+
+    inline T const &operator() (T const &aVal) const
+    {
+        return aVal;
+    }
+    
+    const char* getComponentName (int const &aVal)
+    {
+        return PPPBASETEMPLATE_INT;
+    }
+    
+    const char* getComponentName (double const &aVal)
+    {
+        return PPPBASETEMPLATE_REAL;
+    }
+    
+    const char* getComponentName (long double const &aVal)
+    {
+        return PPPBASETEMPLATE_LREAL;
+    }
+    
+    const char* getComponentName (PPPcomplex const &aVal)
+    {
+        return PPPBASETEMPLATE_CMPL;
+    }
+    
+    const char* getComponentName (PPPellipse2D const &aVal)
+    {
+        return PPPBASETEMPLATE_EPAR2D;
+    }
+    
+    const char* getComponentName (PPPellipse3D const &aVal)
+    {
+        return PPPBASETEMPLATE_EPAR3D;
+    }
+    
+    const char *getComponentCode (void)
+    {
+        return PPPBASETEMPLATE_FREECODE;
+    }
+    
+#ifdef PPPCONF_USEMAPM
+    const char* getComponentName(MAPM const &aVal)
+    {   return PPPBASETEMPLATE_MAPM;};
+#endif
+    const char *getComponentName (void)
+    {
+        T testval;
+        return getComponentName(testval);
+    }
+    
+};
+// end of object
 
 #endif  

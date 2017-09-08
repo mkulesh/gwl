@@ -23,56 +23,63 @@
  * PPPWaveletMorlet
  ***********************************************************************/
 class PPPWaveletMorlet : public PPPWavelet
-  {
-  private:
-
+{
+private:
+    
     double _sigma;  // wavelet parameter
-
-  public:
-
-    PPPWaveletMorlet(double sigma=1.0, double freq=1.0, double pos=0.0) {
-      _type = CWmorlet;
-      setObjectName(PPPWAVELETS_MORLET);
-      setFrequency(freq);
-      setPosition(pos);
-      _sigma = sigma;
-      _f0 = 1.0;
-      };
-
-    void setFrequencyResolution(double dfreq) {
-      _sigma = 1.0/dfreq;
-      };
-
-  private:
-
-    double evalRealTime(double r) const {
-      return cos(2.0*M_PI*r)*exp(-(r*r)/(2.0*_sigma*_sigma));
-      };
-
-    double evalImagTime(double r) const {
-      return sin(2.0*M_PI*r)*exp(-(r*r)/(2.0*_sigma*_sigma));
-      };
-
-    double evalRealFreq(double om) const {
-      double a = _sigma*(om - 2.0*M_PI);
-      return (om<=0.0)? 0.0 : _sigma*sqrt(2.0*M_PI)*exp(-a*a/2.0);
-      };
-
-    double evalImagFreq(double om) const {
-      return 0.0;
-      };
-
-    double getCutoffTime(double eps) const {
-      return _sigma*sqrt(2.0*log(1.0/eps));
-      };
-
-    double getCutoffFreq(double eps) const {
-      return sqrt(-2.0*log(eps/(sqrt(2.0*M_PI)*_sigma)))/_sigma;
-      };
-
-  }; // end of object
-
-
+    
+public:
+    
+    PPPWaveletMorlet (double sigma = 1.0, double freq = 1.0, double pos = 0.0)
+    {
+        _type = CWmorlet;
+        setObjectName (PPPWAVELETS_MORLET);
+        setFrequency(freq);
+        setPosition(pos);
+        _sigma = sigma;
+        _f0 = 1.0;
+    }
+    
+    void setFrequencyResolution (double dfreq)
+    {
+        _sigma = 1.0 / dfreq;
+    }
+    
+private:
+    
+    double evalRealTime (double r) const
+    {
+        return cos(2.0 * M_PI * r) * exp(-(r * r) / (2.0 * _sigma * _sigma));
+    }
+    
+    double evalImagTime (double r) const
+    {
+        return sin(2.0 * M_PI * r) * exp(-(r * r) / (2.0 * _sigma * _sigma));
+    }
+    
+    double evalRealFreq (double om) const
+    {
+        double a = _sigma * (om - 2.0 * M_PI);
+        return (om <= 0.0) ? 0.0 : _sigma * sqrt(2.0 * M_PI) * exp(-a * a / 2.0);
+    }
+    
+    double evalImagFreq (double om) const
+    {
+        return 0.0;
+    }
+    
+    double getCutoffTime (double eps) const
+    {
+        return _sigma * sqrt(2.0 * log(1.0 / eps));
+    }
+    
+    double getCutoffFreq (double eps) const
+    {
+        return sqrt(-2.0 * log(eps / (sqrt(2.0 * M_PI) * _sigma))) / _sigma;
+    }
+    
+};
+// end of object
 
 #endif
 

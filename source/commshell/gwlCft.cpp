@@ -18,61 +18,62 @@
  ******************************************************************************/
 #include "gwlMainObject.h"
 
-typedef gwlMainObject< PPPSignalContainer<double>, PPPSignalContainer<PPPcomplex> > gwlMainDouble;
-typedef gwlMainObject< PPPSignalContainer<PPPcomplex>, PPPSignalContainer<PPPcomplex> > gwlMainCmpl;
+typedef gwlMainObject<PPPSignalContainer<double>, PPPSignalContainer<PPPcomplex> > gwlMainDouble;
+typedef gwlMainObject<PPPSignalContainer<PPPcomplex>, PPPSignalContainer<PPPcomplex> > gwlMainCmpl;
 
 template<class AType, class ATypeMain> class gwlMain : public ATypeMain
-  {
-  private:
-    UTOption_str        o_name;
-    UTOption_lit        o_shift;
+{
+private:
 
-  public:
-    gwlMain(const char *aAppName, const char *aModName, const char *aDefIn, const char *aDefOut):
-      ATypeMain(aAppName, aModName, aDefIn, aDefOut),
-      o_name   ("n",  "name",  "<str>",  "name of the output signal (by default 'Fourier spectrum')", "Fourier spectrum"),
-      o_shift  ("s",  "shift", "if set, shift Fourier spectrum to the regressive/progressive form", false)
-        {
+    UTOption_str o_name;
+    UTOption_lit o_shift;
+
+public:
+
+    gwlMain (const char *aAppName, const char *aModName, const char *aDefIn, const char *aDefOut) :
+            ATypeMain(aAppName, aModName, aDefIn, aDefOut),
+            o_name("n", "name", "<str>",
+                   "name of the output signal (by default 'Fourier spectrum')", "Fourier spectrum"),
+            o_shift("s", "shift",
+                    "if set, shift Fourier spectrum to the regressive/progressive form", false)
+    {
         ATypeMain::o_parser.add(ATypeMain::o_nomess);
         ATypeMain::o_parser.add(ATypeMain::o_infile);
         ATypeMain::o_parser.add(ATypeMain::o_outfile);
         ATypeMain::o_parser.add(ATypeMain::o_outtype);
         ATypeMain::o_parser.add(o_name);
         ATypeMain::o_parser.add(o_shift);
-        };
-
-    void calc(void) {
-      PPPTransFour<AType> trans;
-      trans.setShowProgress(false);
-      trans.FT(ATypeMain::aDest,ATypeMain::aSource);
-      PPPTransFour<PPPcomplex> transcmpl;
-      if(o_shift.isOptionGiven())
-        transcmpl.FTShift(ATypeMain::aDest);
-      ATypeMain::aDest.setObjectName(o_name.getValue());
-      };
-
-  };  // end of object
-
-  
-main(int  argc, char **argv)
-  {
-  gwlMain<double,gwlMainDouble> WT1("Fourier transform","gwlCft","signal.dat","fourier.dat");
-  WT1.parse(argc, argv);
-  ConApplication.onMessage(ConApplication.getAppName());
-  PPPObjectIO::ObjectType head = WT1.read_binheader();
-  if(head == PPPObjectIO::SIGD)
-    {
-    WT1.evaluate();
     }
-  else
+    
+    void calc (void)
     {
-    gwlMain<PPPcomplex,gwlMainCmpl> WT2("Fourier transform","gwlCft","signal.dat","fourier.dat");
-    WT2.parse(argc, argv);
-    WT2.evaluate();
+        PPPTransFour<AType> trans;
+        trans.setShowProgress(false);
+        trans.FT(ATypeMain::aDest, ATypeMain::aSource);
+        PPPTransFour<PPPcomplex> transcmpl;
+        if (o_shift.isOptionGiven()) transcmpl.FTShift(ATypeMain::aDest);
+        ATypeMain::aDest.setObjectName(o_name.getValue());
     }
-  return 0;
-  }
+    
+};
+// end of object
 
-
-
+main(int argc, char **argv)
+{   
+    gwlMain<double,gwlMainDouble> WT1("Fourier transform","gwlCft","signal.dat","fourier.dat");
+    WT1.parse(argc, argv);
+    ConApplication.onMessage(ConApplication.getAppName());
+    PPPObjectIO::ObjectType head = WT1.read_binheader();
+    if(head == PPPObjectIO::SIGD)
+    {   
+        WT1.evaluate();
+    }
+    else
+    {   
+        gwlMain<PPPcomplex,gwlMainCmpl> WT2("Fourier transform","gwlCft","signal.dat","fourier.dat");
+        WT2.parse(argc, argv);
+        WT2.evaluate();
+    }
+    return 0;
+}
 

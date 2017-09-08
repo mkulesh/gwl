@@ -30,20 +30,19 @@
 // #define PPPCONF_USEOPTIMIZATION true // include optimization objects
 // #define PPPCONF_USEWAVESSOL true     // include waves solutions objects
 // #define PPPCONF_USEQWT true          // include QWT and related graphical objects
-
 /************************************************************************
  * PPP library implementation
  ************************************************************************/
 // External parsing library
 #ifdef PPPCONF_USEPARSING
-  #include "UTparsing.h"
+#include "UTparsing.h"
 #endif
 
 // PPP library version
 #ifdef PPPCONF_CHECKINDEX
-  #define PPPCONF_VERSION "ver. 1.5 (check index activated)"
+#define PPPCONF_VERSION "ver. 1.5 (check index activated)"
 #else
-  #define PPPCONF_VERSION "ver. 1.5"
+#define PPPCONF_VERSION "ver. 1.5"
 #endif
 
 // Basic errors for functions arguments
@@ -82,26 +81,36 @@ using namespace std;
 
 // Some small helpfull objects
 template<class T>
-inline void SWAP(T &a, T &b)
-	{T dum=a; a=b; b=dum;}
+inline void SWAP (T &a, T &b)
+{
+    T dum = a;
+    a = b;
+    b = dum;
+}
 
-template < class A, class Comp > class PPPCompareLess {
-  private:
+template<class A, class Comp> class PPPCompareLess
+{
+private:
     Comp _comp;
-  public:
-    PPPCompareLess ( Comp const & comp ): _comp ( comp ) {};
-    bool inline operator ()(A const & a, A const & b ) const {
-      return ( _comp(a)  < _comp(b) );
-      };
-  };
+public:
+    PPPCompareLess (Comp const & comp) :
+            _comp(comp)
+    {
+    }
+    
+    bool inline operator () (A const & a, A const & b) const
+    {
+        return (_comp(a) < _comp(b));
+    }
+};
 
 // External MAPM library
 #ifdef PPPCONF_USEMAPM
-  #include "m_apm.h"
-  #include "PPPmapm.h"
-  #include "PPPmcomplex.h"
+#include "m_apm.h"
+#include "PPPmapm.h"
+#include "PPPmcomplex.h"
 #endif
-  
+
 // PPP objects
 #include "PPPappliccon.h"
 PPPApplicationCon ConApplication;
@@ -151,9 +160,9 @@ template<class AType> class PPPMatrixContainer;
 
 #include "UTFFT.h"
 #ifdef PPPCONF_USEFFTW3
-  #include "UTFFTW3.cpp"
+#include "UTFFTW3.cpp"
 #else
-  #include "UTFFTnr.cpp"
+#include "UTFFTnr.cpp"
 #endif
 
 #include "PPPfft.h"
@@ -172,36 +181,36 @@ template<class AType> class PPPMatrixContainer;
 #include "PPPObjectIO.h"
 
 #ifdef PPPCONF_USEOPTIMIZATION
-  #include "PPPopti.h"
-  #include "PPPoptiLM.h"
-  #include "PPPOptiSP.h"
-  #include "PPPOptiSI.h"
-  #include "PPPOptiMult.h"
+#include "PPPopti.h"
+#include "PPPoptiLM.h"
+#include "PPPOptiSP.h"
+#include "PPPOptiSI.h"
+#include "PPPOptiMult.h"
 #endif
 
 #ifdef PPPCONF_USEWAVESSOL
-  #include "PPPinifile.h"
-  #include "PPPwaves.h"
-  #include "PPPwavesSpec.h"
-  #include "PPPwavesClass.h"
-  #include "PPPwavesCoss.h"
-  #include "PPPwavesRedc.h"
+#include "PPPinifile.h"
+#include "PPPwaves.h"
+#include "PPPwavesSpec.h"
+#include "PPPwavesClass.h"
+#include "PPPwavesCoss.h"
+#include "PPPwavesRedc.h"
 #endif
 
 #ifdef PPPCONF_USEQWT
-  #include <qapplication.h>
-  #include <qmainwindow.h>
-  #include <qpopupmenu.h>
-  #include <qstatusbar.h>
-  #include <qmenubar.h>
-  #include <qmessagebox.h>
-  #include "qwt_plot_curve.h"
-  #include "qwt_plot_spectrogram.h"
-  #include "qwt_plot_picker.h"
-  #include "qwt_scale_engine.h"
-  #include "UTPlotRasterData.h"
-  #include "UTMatrixOfQwtPlot.h"
-  #include "PPPsignalplot.h"
+#include <qapplication.h>
+#include <qmainwindow.h>
+#include <qpopupmenu.h>
+#include <qstatusbar.h>
+#include <qmenubar.h>
+#include <qmessagebox.h>
+#include "qwt_plot_curve.h"
+#include "qwt_plot_spectrogram.h"
+#include "qwt_plot_picker.h"
+#include "qwt_scale_engine.h"
+#include "UTPlotRasterData.h"
+#include "UTMatrixOfQwtPlot.h"
+#include "PPPsignalplot.h"
 #endif
 
 #endif

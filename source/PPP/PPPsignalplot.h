@@ -22,95 +22,92 @@
 #define PPPSIGNALPLOT_NAME          "plot of a signal"
 #define PPPSIGNALPLOT_ERRTYPE       "incorrect signal data type in input file: "
 
-
 /************************************************************************
  * PPPSignalPlot
  ***********************************************************************/
 class PPPSignalPlot : public PPPBaseObject
-  {
-  private:
+{
+private:
+    
+    typedef enum
+    {
+        REAL_SIGNAL, COMPLEX_SIGNAL, NONE
+    } SIGTYPE;
 
-    typedef enum {REAL_SIGNAL, COMPLEX_SIGNAL, NONE} SIGTYPE;
-    PPPSignalContainer < double > * _signalR;
-    PPPSignalContainer < PPPcomplex > * _signalC;
+    PPPSignalContainer<double> * _signalR;
+    PPPSignalContainer<PPPcomplex> * _signalC;
 
-  public:
-
-    PPPSignalPlot(): _signalR (NULL), _signalC (NULL) {
-      setObjectName(PPPSIGNALPLOT_NAME);
-      };
-
-    void read(char const * aName) {
-      PPPObjectIO io;
-      PPPBaseObject * tmp = io.read(aName);
-      if ( dynamic_cast < PPPSignalContainer < PPPcomplex > * > (tmp) )
+public:
+    
+    PPPSignalPlot () :
+            _signalR(NULL),
+            _signalC(NULL)
+    {
+        setObjectName(PPPSIGNALPLOT_NAME);
+    }
+    
+    void read (char const * aName)
+    {
+        PPPObjectIO io;
+        PPPBaseObject * tmp = io.read(aName);
+        if (dynamic_cast<PPPSignalContainer<PPPcomplex> *>(tmp))
         {
-        _signalC = dynamic_cast < PPPSignalContainer < PPPcomplex > * > (tmp);
+            _signalC = dynamic_cast<PPPSignalContainer<PPPcomplex> *>(tmp);
         }
-      else if ( dynamic_cast < PPPSignalContainer < double >  * > (tmp) )
+        else if (dynamic_cast<PPPSignalContainer<double> *>(tmp))
         {
-        _signalR = dynamic_cast < PPPSignalContainer < double >  * > (tmp);
+            _signalR = dynamic_cast<PPPSignalContainer<double> *>(tmp);
         }
-      else
+        else
         {
-        onError(PPPSIGNALPLOT_ERRTYPE+string(aName));
+            onError(PPPSIGNALPLOT_ERRTYPE + string(aName));
         }
-      };
-
-    PPPAxis const & getTime() const {
-      if ( _signalC != NULL )
-        return _signalC -> getAxis();
-      else
-        return _signalR -> getAxis();
-      };
-
-    void getPlotCurves (unsigned trace, vector < QwtPlotCurve * > & curves, double & minvalue, double & maxvalue) {
-      if ( _signalR != NULL )
+    }
+    
+    PPPAxis const & getTime () const
+    {
+        if (_signalC != NULL)
+            return _signalC->getAxis();
+        else
+            return _signalR->getAxis();
+    }
+    
+    void getPlotCurves (unsigned trace, vector<QwtPlotCurve *> & curves, double & minvalue,
+                        double & maxvalue)
+    {
+        if (_signalR != NULL)
         {
-        maxvalue = _signalR -> getChannel(trace).getMaxValue();
-        minvalue = _signalR -> getChannel(trace).getMinValue();
-        QwtPlotCurve * pc = new QwtPlotCurve ();
-        curves.push_back ( pc );
-        pc -> setData(getTime().begin(),
-          _signalR -> getChannel(trace).begin(),
-          getTime().size());
+            maxvalue = _signalR->getChannel(trace).getMaxValue();
+            minvalue = _signalR->getChannel(trace).getMinValue();
+            QwtPlotCurve * pc = new QwtPlotCurve();
+            curves.push_back(pc);
+            pc->setData(getTime().begin(), _signalR->getChannel(trace).begin(), getTime().size());
         }
-      else if ( _signalC != NULL )
+        else if (_signalC != NULL)
         {
-        PPPVectorContainer<double> tmp;
-        // real part
-        QwtPlotCurve * pcre = new QwtPlotCurve ();
-        curves.push_back ( pcre );
-        _signalC -> getChannel(trace).compTransform(tmp, PPPcomplexRe());
-          pcre -> setData(getTime().begin(),tmp.begin(),getTime().size());
-          maxvalue = tmp.getMaxValue();
-          minvalue = -maxvalue;
-        // imag part
-        QwtPlotCurve * pcim = new QwtPlotCurve ();
-        curves.push_back ( pcim );
-        _signalC -> getChannel(trace).compTransform(tmp, PPPcomplexIm());
-          pcim -> setData(getTime().begin(),tmp.begin(),getTime().size());
-          if(tmp.getMaxValue() > maxvalue)
-            {
+            PPPVectorContainer<double> tmp;
+            // real part
+            QwtPlotCurve * pcre = new QwtPlotCurve();
+            curves.push_back(pcre);
+            _signalC->getChannel(trace).compTransform(tmp, PPPcomplexRe());
+            pcre->setData(getTime().begin(), tmp.begin(), getTime().size());
             maxvalue = tmp.getMaxValue();
             minvalue = -maxvalue;
+            // imag part
+            QwtPlotCurve * pcim = new QwtPlotCurve();
+            curves.push_back(pcim);
+            _signalC->getChannel(trace).compTransform(tmp, PPPcomplexIm());
+            pcim->setData(getTime().begin(), tmp.begin(), getTime().size());
+            if (tmp.getMaxValue() > maxvalue)
+            {
+                maxvalue = tmp.getMaxValue();
+                minvalue = -maxvalue;
             }
-        /*
-        // modulus
-        QwtPlotCurve * pcab = new QwtPlotCurve ();
-        curves.push_back ( pcab );
-        _signalC -> getChannel(trace).compTransform(tmp, PPPcomplexAbs());
-          pcab -> setData(getTime().begin(),tmp.begin(),getTime().size());
-        // negative modulus
-        QwtPlotCurve * pcma = new QwtPlotCurve ();
-        curves.push_back ( pcma );
-        for(unsigned i=0; i<tmp.size(); i++) tmp[i] = -tmp[i];
-          pcma -> setData(getTime().begin(),tmp.begin(),getTime().size());
-        */
         }
-      };
-
-  };  // end of object
+    }
+    
+};
+// end of object
 
 #endif
 

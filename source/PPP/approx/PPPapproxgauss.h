@@ -23,51 +23,58 @@
  * PPPApproximateGauss
  ***********************************************************************/
 class PPPApproximateGauss : public PPPApproximate
-  {
-  public:
-
-    PPPApproximateGauss(unsigned aSize) {
-      setObjectName(PPPAPPROXIMATE_GAU);
-      _type = APTgauss;
-      if(aSize != 3) onError(ARG_VALUE+string("PPPApproximateGauss"));
-      _params.resize(aSize);
-      };
-
-    const char *getInfo(void) {
-      strstream str;
-      str << "Func(f) = a0*f + a1*f*exp(-f*f/(2.0*a2*a2))" << endl;
-      str << "  a[i] = " << _params.vectorToStr() << ends;
-      onNotation(str.str());
-      return getNotation();
-      };
-
-    double Func(double f) {
-      return _params[0]*f + _params[1]*f*exp(-f*f/(2.0*_params[2]*_params[2]));
-      };
-
-    double FuncDivX(double f) {
-      return _params[0] + _params[1]*(1.0-f*f/(_params[2]*_params[2]))*exp(-f*f/(2.0*_params[2]*_params[2]));
-      };
-
-    double FuncDivXPar(double f, unsigned Ai) {
-      double res = 0.0;
-      double ff  = f*f/(_params[2]*_params[2]);
-      if(Ai == 0) res=1.0;
-      if(Ai == 1) res=(1.0-ff)*exp(-ff/2.0);
-      if(Ai == 2) res=_params[1]*ff*(3.0-ff)*exp(-ff/2.0)/_params[2];
-      return res;
-      };
-
-    double FuncDivPar(double f, unsigned Ai) {
-      double res = 0.0;
-      double ff  = f*f/(_params[2]*_params[2]);
-      if(Ai == 0) res=f;
-      if(Ai == 1) res=f*exp(-ff/2.0);
-      if(Ai == 2) res=_params[1]*f*f*f*exp(-ff/2.0)/(2*_params[2]*_params[2]);
-      return res;
-      };
-
-  }; // end of object
-
+{
+public:
+    
+    PPPApproximateGauss (unsigned aSize)
+    {
+        setObjectName (PPPAPPROXIMATE_GAU);
+        _type = APTgauss;
+        if (aSize != 3) onError(ARG_VALUE + string("PPPApproximateGauss"));
+        _params.resize(aSize);
+    }
+    
+    const char *getInfo (void)
+    {
+        strstream str;
+        str << "Func(f) = a0*f + a1*f*exp(-f*f/(2.0*a2*a2))" << endl;
+        str << "  a[i] = " << _params.vectorToStr() << ends;
+        onNotation(str.str());
+        return getNotation();
+    }
+    
+    double Func (double f)
+    {
+        return _params[0] * f + _params[1] * f * exp(-f * f / (2.0 * _params[2] * _params[2]));
+    }
+    
+    double FuncDivX (double f)
+    {
+        return _params[0] + _params[1] * (1.0 - f * f / (_params[2] * _params[2]))
+                            * exp(-f * f / (2.0 * _params[2] * _params[2]));
+    }
+    
+    double FuncDivXPar (double f, unsigned Ai)
+    {
+        double res = 0.0;
+        double ff = f * f / (_params[2] * _params[2]);
+        if (Ai == 0) res = 1.0;
+        if (Ai == 1) res = (1.0 - ff) * exp(-ff / 2.0);
+        if (Ai == 2) res = _params[1] * ff * (3.0 - ff) * exp(-ff / 2.0) / _params[2];
+        return res;
+    }
+    
+    double FuncDivPar (double f, unsigned Ai)
+    {
+        double res = 0.0;
+        double ff = f * f / (_params[2] * _params[2]);
+        if (Ai == 0) res = f;
+        if (Ai == 1) res = f * exp(-ff / 2.0);
+        if (Ai == 2) res = _params[1] * f * f * f * exp(-ff / 2.0) / (2 * _params[2] * _params[2]);
+        return res;
+    }
+    
+};
+// end of object
 
 #endif

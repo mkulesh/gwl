@@ -28,154 +28,205 @@
 /** PPPSpectrParams                                                      */
 /************************************************************************/
 class PPPSpectrParams : public PPPBaseObject
-  {
-  private:
-    unsigned                _transformType;			// slow or fast wavelet transform
-    double                  _cutoffprec;                        // wavelet cutoff for slow wavelet transform
+{
+private:
+
+    unsigned _transformType;                    // slow or fast wavelet transform
+    double _cutoffprec;                         // wavelet cutoff for slow wavelet transform
     // characterizations of frequency axis
-    PPPAxis                 _freq;				// the value of the frequencies
-    PPPAxis		    _time;          			// the time axis of transform
+    PPPAxis _freq;                              // the value of the frequencies
+    PPPAxis _time;                              // the time axis of transform
     // wavelet of direct transform
-    PPPWavelet::WaveletType _waveletType;			// the type of the wavelet of direct transform
-    double                  _waveletPar;			// a single parameter for the wavelet
-    PPPWavelet *            _wavelet;				// the wavelt itself
+    PPPWavelet::WaveletType _waveletType;       // the type of the wavelet of direct transform
+    double _waveletPar;                         // a single parameter for the wavelet
+    PPPWavelet * _wavelet;                      // the wavelt itself
     // wavelet of inverse transform
-    PPPWavelet::WaveletType _invwaveletType;			// the type of wavelet for the inverse transform
-    double                  _invwaveletPar;			// a single paramter for the inverse transform
-    PPPWavelet *            _invwavelet;			// the reconstruction wavelet
-
-  public:
-
-    typedef enum {
-	WSTdirect, 		// direct transform
-	WSTinverse		// inverse transform
+    PPPWavelet::WaveletType _invwaveletType;    // the type of wavelet for the inverse transform
+    double _invwaveletPar;                      // a single paramter for the inverse transform
+    PPPWavelet * _invwavelet;                   // the reconstruction wavelet
+    
+public:
+    
+    typedef enum
+    {
+        WSTdirect,        // direct transform
+        WSTinverse        // inverse transform
     } TransformDir;
 
-
-    PPPSpectrParams(void) : _wavelet(NULL), _invwavelet(NULL), _cutoffprec(0.01) {
-      setObjectVer(PPPSPECTRPARAMS_OBJVER);
-      setObjectName(PPPSPECTRPARAMS_NAME);
-      PPPAxis aAxis(128, 1, 50.0, PPPAxis::ATlin, PPPSPECTRPARAMS_FREQ);
-      initialize(0, aAxis, "morlet", 1.0, "delta", 1.0);
-      };
-
-    ~PPPSpectrParams() {
-      if(_wavelet != NULL) delete _wavelet;
-      if(_invwavelet != NULL) delete _invwavelet;
-      };
-
-    void initialize (
-    	unsigned atransformType,
-		PPPAxis &aAxis,
-		string awavName,
-		double awaveletPar,
-		string ainvwavName,
-		double ainvwaveletPar,
-                double acutoffprec = 0.01
-	) {
-      PPPWavelet tmpwav;
-      _transformType  = atransformType;
-      _waveletType    = tmpwav.strToWavelet(awavName);
-      _waveletPar     = awaveletPar;
-      _invwaveletType = tmpwav.strToWavelet(ainvwavName);
-      _invwaveletPar  = ainvwaveletPar;
-      _cutoffprec = acutoffprec;
-      _prepareWavelets();
-      _freq.assign(aAxis);
-      };
-
-    void setInverseParams(string ainvwavName, double ainvwaveletPar, double acutoffprec = 0.01) {
-      PPPWavelet tmpwav;
-      _invwaveletType = tmpwav.strToWavelet(ainvwavName);
-      _invwaveletPar  = ainvwaveletPar;
-      _cutoffprec = acutoffprec;
-      _prepareWavelets();
-      };
-
-    inline unsigned  getTransformType() const   { return _transformType; };
-    inline unsigned  voices() const             { return _freq.size(); };
-    inline PPPAxis&  getFreq(void)              { return _freq; };
-    inline PPPAxis&  getTime(void)              { return _time; };
-    inline int       getWriteFreq() const       { return -1; };
-    inline double    getCutoffPrec() const      { return _cutoffprec; };
-
-    inline PPPWavelet::WaveletType getWaveletType(const TransformDir aType) const {
-      return (aType == WSTdirect)? _waveletType : _invwaveletType;
-      };
-
-    inline PPPWavelet * getWavelet(const TransformDir aType) {
-      return (aType == WSTdirect)? _wavelet : _invwavelet;
-      };
-
-    inline double getWaveletPar(const TransformDir aType) {
-      return (aType == WSTdirect)? _waveletPar : _invwaveletPar;
-      };
-
-    PPPcomplex getInverseConstant() {
-      _clearWaveletsPosition();
-      return getWavelet(WSTdirect)->Chm(getWavelet(WSTinverse),100);
-      };
-
+    PPPSpectrParams (void) :
+            _wavelet(NULL),
+            _invwavelet(NULL),
+            _cutoffprec(0.01)
+    {
+        setObjectVer(PPPSPECTRPARAMS_OBJVER);
+        setObjectName(PPPSPECTRPARAMS_NAME);
+        PPPAxis aAxis(128, 1, 50.0, PPPAxis::ATlin, PPPSPECTRPARAMS_FREQ);
+        initialize(0, aAxis, "morlet", 1.0, "delta", 1.0);
+    }
+    
+    ~PPPSpectrParams ()
+    {
+        if (_wavelet != NULL) delete _wavelet;
+        if (_invwavelet != NULL) delete _invwavelet;
+    }
+    
+    void initialize (unsigned atransformType, PPPAxis &aAxis, string awavName, double awaveletPar,
+                     string ainvwavName, double ainvwaveletPar, double acutoffprec = 0.01)
+    {
+        PPPWavelet tmpwav;
+        _transformType = atransformType;
+        _waveletType = tmpwav.strToWavelet(awavName);
+        _waveletPar = awaveletPar;
+        _invwaveletType = tmpwav.strToWavelet(ainvwavName);
+        _invwaveletPar = ainvwaveletPar;
+        _cutoffprec = acutoffprec;
+        _prepareWavelets();
+        _freq.assign(aAxis);
+    }
+    
+    void setInverseParams (string ainvwavName, double ainvwaveletPar, double acutoffprec = 0.01)
+    {
+        PPPWavelet tmpwav;
+        _invwaveletType = tmpwav.strToWavelet(ainvwavName);
+        _invwaveletPar = ainvwaveletPar;
+        _cutoffprec = acutoffprec;
+        _prepareWavelets();
+    }
+    
+    inline unsigned getTransformType () const
+    {
+        return _transformType;
+    }
+    
+    inline unsigned voices () const
+    {
+        return _freq.size();
+    }
+    
+    inline PPPAxis& getFreq (void)
+    {
+        return _freq;
+    }
+    
+    inline PPPAxis& getTime (void)
+    {
+        return _time;
+    }
+    
+    inline int getWriteFreq () const
+    {
+        return -1;
+    }
+    
+    inline double getCutoffPrec () const
+    {
+        return _cutoffprec;
+    }
+    
+    inline PPPWavelet::WaveletType getWaveletType (const TransformDir aType) const
+    {
+        return (aType == WSTdirect) ? _waveletType : _invwaveletType;
+    }
+    
+    inline PPPWavelet * getWavelet (const TransformDir aType)
+    {
+        return (aType == WSTdirect) ? _wavelet : _invwavelet;
+    }
+    
+    inline double getWaveletPar (const TransformDir aType)
+    {
+        return (aType == WSTdirect) ? _waveletPar : _invwaveletPar;
+    }
+    
+    PPPcomplex getInverseConstant ()
+    {
+        _clearWaveletsPosition();
+        return getWavelet(WSTdirect)->Chm(getWavelet(WSTinverse), 100);
+    }
+    
     /**
      *  file stream operations
      */
-    void fwrite(FILE *stream) {
-      unsigned val;
-      fwrite_streaminfo(stream, getObjectVer(), sizeof(double));
-      std :: fwrite((void*)&_transformType,sizeof(_transformType),1,stream);
-      val=_waveletType; std :: fwrite((void*)&val,sizeof(val),1,stream);
-      std :: fwrite((void*)&_waveletPar,sizeof(_waveletPar),1,stream);
-      val=_invwaveletType; std :: fwrite((void*)&val,sizeof(val),1,stream);
-      std :: fwrite((void*)&_invwaveletPar,sizeof(_invwaveletPar),1,stream);
-      _freq.fwrite(stream);
-      PPPBaseObject :: fwrite(stream);
-      };
-
-    void fread(FILE *stream) {
-      unsigned val;
-      fread_streaminfo(stream, getObjectVer(), sizeof(double));
-      std :: fread((void*)&_transformType,sizeof(_transformType),1,stream);
-      std :: fread((void*)&val,sizeof(val),1,stream); _waveletType = (PPPWavelet::WaveletType)val;
-      std :: fread((void*)&_waveletPar,sizeof(_waveletPar),1,stream);
-      std :: fread((void*)&val,sizeof(val),1,stream); _invwaveletType = (PPPWavelet::WaveletType)val;
-      std :: fread((void*)&_invwaveletPar,sizeof(_invwaveletPar),1,stream);
-      _freq.fread(stream);
-      PPPBaseObject :: fread(stream);
-      _prepareWavelets();
-      };
-
-    PPPWavelet *createWavelet(PPPWavelet::WaveletType aWavelet, double aPar) {
-      PPPWavelet *wav;
-      switch(aWavelet)
+    void fwrite (FILE *stream)
+    {
+        unsigned val;
+        fwrite_streaminfo(stream, getObjectVer(), sizeof(double));
+        std::fwrite((void*) &_transformType, sizeof(_transformType), 1, stream);
+        val = _waveletType;
+        std::fwrite((void*) &val, sizeof(val), 1, stream);
+        std::fwrite((void*) &_waveletPar, sizeof(_waveletPar), 1, stream);
+        val = _invwaveletType;
+        std::fwrite((void*) &val, sizeof(val), 1, stream);
+        std::fwrite((void*) &_invwaveletPar, sizeof(_invwaveletPar), 1, stream);
+        _freq.fwrite(stream);
+        PPPBaseObject::fwrite(stream);
+    }
+    
+    void fread (FILE *stream)
+    {
+        unsigned val;
+        fread_streaminfo(stream, getObjectVer(), sizeof(double));
+        std::fread((void*) &_transformType, sizeof(_transformType), 1, stream);
+        std::fread((void*) &val, sizeof(val), 1, stream);
+        _waveletType = (PPPWavelet::WaveletType) val;
+        std::fread((void*) &_waveletPar, sizeof(_waveletPar), 1, stream);
+        std::fread((void*) &val, sizeof(val), 1, stream);
+        _invwaveletType = (PPPWavelet::WaveletType) val;
+        std::fread((void*) &_invwaveletPar, sizeof(_invwaveletPar), 1, stream);
+        _freq.fread(stream);
+        PPPBaseObject::fread(stream);
+        _prepareWavelets();
+    }
+    
+    PPPWavelet *createWavelet (PPPWavelet::WaveletType aWavelet, double aPar)
+    {
+        PPPWavelet *wav;
+        switch (aWavelet)
         {
-        case PPPWavelet::CWmorlet:   wav = new PPPWaveletMorlet(aPar,1.0,0.0); break;
-        case PPPWavelet::CWmorletre: wav = new PPPWaveletMorletRe(aPar,1.0,0.0); break;
-        case PPPWavelet::CWcauchy:   wav = new PPPWaveletCauchy(aPar,1.0,0.0); break;
-        case PPPWavelet::CWshanon:   wav = new PPPWaveletShanon(aPar,1.0,0.0); break;
-        case PPPWavelet::CWhaar:     wav = new PPPWaveletHaar(1.0,0.0); break;
-        case PPPWavelet::CWdelta:    wav = new PPPWaveletDelta; break;
-        default: onError(PPPSPECTRPARAMS_ERRWAV+string("createWavelet"));
+        case PPPWavelet::CWmorlet:
+            wav = new PPPWaveletMorlet(aPar, 1.0, 0.0);
+            break;
+        case PPPWavelet::CWmorletre:
+            wav = new PPPWaveletMorletRe(aPar, 1.0, 0.0);
+            break;
+        case PPPWavelet::CWcauchy:
+            wav = new PPPWaveletCauchy(aPar, 1.0, 0.0);
+            break;
+        case PPPWavelet::CWshanon:
+            wav = new PPPWaveletShanon(aPar, 1.0, 0.0);
+            break;
+        case PPPWavelet::CWhaar:
+            wav = new PPPWaveletHaar(1.0, 0.0);
+            break;
+        case PPPWavelet::CWdelta:
+            wav = new PPPWaveletDelta;
+            break;
+        default:
+            onError(PPPSPECTRPARAMS_ERRWAV + string("createWavelet"));
         }
-      if(wav == NULL) onError(MEM_ERRALLOC+string("createWavelet"));
-      return wav;
-      };
-
-  private:
-
-    void _prepareWavelets(void) {
-      if(_wavelet != NULL) delete _wavelet;
-      _wavelet = createWavelet(_waveletType,_waveletPar);
-      if(_invwavelet != NULL) delete _invwavelet;
-      _invwavelet = createWavelet(_invwaveletType,_invwaveletPar);
-      };
-
-    void _clearWaveletsPosition() {
-      getWavelet(WSTdirect)->setPosition(0.0);
-      getWavelet(WSTdirect)->setFrequency(1.0);
-      getWavelet(WSTinverse)->setPosition(0.0);
-      getWavelet(WSTinverse)->setFrequency(1.0);
-      };
-
-  }; // end of object
+        if (wav == NULL) onError(MEM_ERRALLOC + string("createWavelet"));
+        return wav;
+    }
+    
+private:
+    
+    void _prepareWavelets (void)
+    {
+        if (_wavelet != NULL) delete _wavelet;
+        _wavelet = createWavelet(_waveletType, _waveletPar);
+        if (_invwavelet != NULL) delete _invwavelet;
+        _invwavelet = createWavelet(_invwaveletType, _invwaveletPar);
+    }
+    
+    void _clearWaveletsPosition ()
+    {
+        getWavelet(WSTdirect)->setPosition(0.0);
+        getWavelet(WSTdirect)->setFrequency(1.0);
+        getWavelet(WSTinverse)->setPosition(0.0);
+        getWavelet(WSTinverse)->setFrequency(1.0);
+    }
+    
+};
+// end of object
 
 #endif

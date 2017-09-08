@@ -32,81 +32,85 @@
  * We can also use fft() or ifft() procedures which include these methods 
  ***********************************************************************/
 template<class AType> class PPPFft : public PPPBaseTemplate<AType>
-  {
-  private:
-    PPPMathFunc   _math;
-    UTFFT         _trans;
+{
+private:
+    
+    PPPMathFunc _math;
+    UTFFT _trans;
 
-  public:
-
-    PPPFft(void) {
-      PPPBaseTemplate<AType>::setObjectName(PPPFFT_NAME);
-      };
-
-    void initforward(PPPVectorContainer<PPPcomplex> &aFour, PPPVectorContainer<AType> &aVoice) {
-      if(aVoice.size() == 0)
-        PPPBaseTemplate<AType>::onError(PPPFFT_INVALIDSIZE+string("initforward()"));
-      if(aVoice.size() != aFour.size())
-        PPPBaseTemplate<AType>::onError(PPPFFT_INVALIDSIZE+string("initforward()"));
-      if(!_math.isPowerOfTwo(aVoice.size()))
-        PPPBaseTemplate<AType>::onError(ARG_POW2+string("initforward()"));
-      bool status = false;
-      if(aVoice.isReal())
-        status = _trans.init(
-          (double*)aVoice.begin(),
-          (double*)aFour.begin(),
-          aVoice.size(),
-          _trans.R2C);
-      else
-        status = _trans.init(
-          (double*)aVoice.begin(),
-          (double*)aFour.begin(),
-          aVoice.size(),
-          _trans.C2CFORWARD);
-      if(!status)
-        PPPBaseTemplate<AType>::onError(PPPFFT_ERRINIT+string("initforward()"));
-      };
-
-    void initbackward(PPPVectorContainer<AType> &aVoice, PPPVectorContainer<PPPcomplex> &aFour) {
-      if(aFour.size() == 0)
-        PPPBaseTemplate<AType>::onError(PPPFFT_INVALIDSIZE+string("initbackward()"));
-      if(aVoice.size() != aFour.size())
-        PPPBaseTemplate<AType>::onError(PPPFFT_INVALIDSIZE+string("initbackward()"));
-      if(!_math.isPowerOfTwo(aVoice.size()))
-        PPPBaseTemplate<AType>::onError(ARG_POW2+string("initbackward()"));
-      bool status = false;
-      if(aVoice.isReal())
-        status = _trans.init(
-          (double*)aFour.begin(),
-          (double*)aVoice.begin(),
-          aVoice.size(),
-          _trans.C2R);
-      else
-        status = _trans.init(
-          (double*)aFour.begin(),
-          (double*)aVoice.begin(),
-          aVoice.size(),
-          _trans.C2CBACKWARD);
-      if(!status)
-        PPPBaseTemplate<AType>::onError(PPPFFT_ERRINIT+string("initbackward()"));
-      };
-
-    bool execute(void)  { return _trans.execute(); };
-    bool clear(void) { return _trans.clear(); };
-    inline string &getMethodName(void) { return _trans.getMethodName(); };
-
-    void fft(PPPVectorContainer<PPPcomplex> &aFour, PPPVectorContainer<AType> &aVoice) {
-      initforward(aFour, aVoice);
-      execute();
-      clear();
-      };    	
-
-    void ifft(PPPVectorContainer<AType> &aVoice, PPPVectorContainer<PPPcomplex> &aFour) {
-      initbackward(aVoice, aFour);
-      execute();
-      clear();
-      };    	
-
-  }; // end of object
+public:
+    
+    PPPFft (void)
+    {
+        PPPBaseTemplate<AType>::setObjectName(PPPFFT_NAME);
+    }
+    
+    void initforward (PPPVectorContainer<PPPcomplex> &aFour, PPPVectorContainer<AType> &aVoice)
+    {
+        if (aVoice.size() == 0) PPPBaseTemplate<AType>::onError(
+                PPPFFT_INVALIDSIZE + string("initforward()"));
+        if (aVoice.size() != aFour.size()) PPPBaseTemplate<AType>::onError(
+                PPPFFT_INVALIDSIZE + string("initforward()"));
+        if (!_math.isPowerOfTwo(aVoice.size())) PPPBaseTemplate<AType>::onError(
+                ARG_POW2 + string("initforward()"));
+        bool status = false;
+        if (aVoice.isReal())
+            status = _trans.init((double*) aVoice.begin(), (double*) aFour.begin(), aVoice.size(),
+                                 _trans.R2C);
+        else
+            status = _trans.init((double*) aVoice.begin(), (double*) aFour.begin(), aVoice.size(),
+                                 _trans.C2CFORWARD);
+        if (!status) PPPBaseTemplate<AType>::onError(PPPFFT_ERRINIT + string("initforward()"));
+    }
+    
+    void initbackward (PPPVectorContainer<AType> &aVoice, PPPVectorContainer<PPPcomplex> &aFour)
+    {
+        if (aFour.size() == 0) PPPBaseTemplate<AType>::onError(
+                PPPFFT_INVALIDSIZE + string("initbackward()"));
+        if (aVoice.size() != aFour.size()) PPPBaseTemplate<AType>::onError(
+                PPPFFT_INVALIDSIZE + string("initbackward()"));
+        if (!_math.isPowerOfTwo(aVoice.size())) PPPBaseTemplate<AType>::onError(
+                ARG_POW2 + string("initbackward()"));
+        bool status = false;
+        if (aVoice.isReal())
+            status = _trans.init((double*) aFour.begin(), (double*) aVoice.begin(), aVoice.size(),
+                                 _trans.C2R);
+        else
+            status = _trans.init((double*) aFour.begin(), (double*) aVoice.begin(), aVoice.size(),
+                                 _trans.C2CBACKWARD);
+        if (!status) PPPBaseTemplate<AType>::onError(PPPFFT_ERRINIT + string("initbackward()"));
+    }
+    
+    bool execute (void)
+    {
+        return _trans.execute();
+    }
+    
+    bool clear (void)
+    {
+        return _trans.clear();
+    }
+    
+    inline string &getMethodName (void)
+    {
+        return _trans.getMethodName();
+    }
+    
+    void fft (PPPVectorContainer<PPPcomplex> &aFour, PPPVectorContainer<AType> &aVoice)
+    {
+        initforward(aFour, aVoice);
+        execute();
+        clear();
+    }
+    
+    void ifft (PPPVectorContainer<AType> &aVoice, PPPVectorContainer<PPPcomplex> &aFour)
+    {
+        initbackward(aVoice, aFour);
+        execute();
+        clear();
+    }
+    
+};
+// end of object
 
 #endif /* _PPPFTH */

@@ -18,23 +18,26 @@
  ******************************************************************************/
 #include "gwlMainObject.h"
 
-typedef gwlMainObject< PPPAxis, PPPSignalContainer<double> > gwlMainDouble;
+typedef gwlMainObject<PPPAxis, PPPSignalContainer<double> > gwlMainDouble;
 
 template<class AType, class ATypeMain> class gwlMain : public ATypeMain
-  {
-  private:
-    UTOption_dbl        o_freq;
-    UTOption_dbl        o_time;
-    UTOption_lit        o_four;
+{
+private:
 
-  public:
+    UTOption_dbl o_freq;
+    UTOption_dbl o_time;
+    UTOption_lit o_four;
 
-    gwlMain(const char *aAppName, const char *aModName, const char *aDefIn, const char *aDefOut):
-      ATypeMain(aAppName, aModName, aDefIn, aDefOut),
-      o_freq   ("f", "freq",  "<real>", "frequency of the wavelet (by default 1.0)", 1.0),
-      o_time   ("e", "time",  "<real>", "time position of the wavelet (by default 0.0)", 0.0),
-      o_four   ("u", "four",  "if set, calculate and add Fourier spectrum to the wavelet representation", false)
-        {
+public:
+    
+    gwlMain (const char *aAppName, const char *aModName, const char *aDefIn, const char *aDefOut) :
+            ATypeMain(aAppName, aModName, aDefIn, aDefOut),
+            o_freq("f", "freq", "<real>", "frequency of the wavelet (by default 1.0)", 1.0),
+            o_time("e", "time", "<real>", "time position of the wavelet (by default 0.0)", 0.0),
+            o_four("u", "four",
+                   "if set, calculate and add Fourier spectrum to the wavelet representation",
+                   false)
+    {
         ATypeMain::o_parser.add(ATypeMain::o_nomess);
         ATypeMain::o_parser.add(ATypeMain::o_infile);
         ATypeMain::o_parser.add(ATypeMain::o_outfile);
@@ -45,56 +48,58 @@ template<class AType, class ATypeMain> class gwlMain : public ATypeMain
         ATypeMain::o_parser.add(o_freq);
         ATypeMain::o_parser.add(o_time);
         ATypeMain::o_parser.add(o_four);
-        };
-
-    void calc(void) {
-      // Wavelet
-      PPPWavelet tmpwav;
-      PPPWavelet *wavelet;
-      PPPWavelet::WaveletType waveletType = tmpwav.strToWavelet(ATypeMain::o_wavelet.getValue());
-      PPPSpectrParams sp;
-      wavelet = sp.createWavelet(waveletType,ATypeMain::o_wavpar.getValue());
-      wavelet->setPosition(o_time.getValue());
-      wavelet->setFrequency(o_freq.getValue());
-      // ceate of seismogramm
-      PPPSignalContainer<PPPcomplex> sig, four;
-      wavelet->evalTimeRepresentation(sig, ATypeMain::aSource);
-      unsigned chan = (ATypeMain::isComplex())? 2:1;
-      if(o_four.isOptionGiven()) chan+=3;
-      ATypeMain::aDest.prepare(sig.points(), chan, sig.getAxis(), sig.getObjectName());
-      for(unsigned i=0; i<ATypeMain::aSource.size(); i++)
+    }
+    
+    void calc (void)
+    {
+        // Wavelet
+        PPPWavelet tmpwav;
+        PPPWavelet *wavelet;
+        PPPWavelet::WaveletType waveletType = tmpwav.strToWavelet(ATypeMain::o_wavelet.getValue());
+        PPPSpectrParams sp;
+        wavelet = sp.createWavelet(waveletType, ATypeMain::o_wavpar.getValue());
+        wavelet->setPosition(o_time.getValue());
+        wavelet->setFrequency(o_freq.getValue());
+        // ceate of seismogramm
+        PPPSignalContainer<PPPcomplex> sig, four;
+        wavelet->evalTimeRepresentation(sig, ATypeMain::aSource);
+        unsigned chan = (ATypeMain::isComplex()) ? 2 : 1;
+        if (o_four.isOptionGiven()) chan += 3;
+        ATypeMain::aDest.prepare(sig.points(), chan, sig.getAxis(), sig.getObjectName());
+        for (unsigned i = 0; i < ATypeMain::aSource.size(); i++)
         {
-        ATypeMain::aDest(i,0) = real(sig(i));
-        if(ATypeMain::isComplex()) ATypeMain::aDest(i,1) = imag(sig(i));
+            ATypeMain::aDest(i, 0) = real(sig(i));
+            if (ATypeMain::isComplex()) ATypeMain::aDest(i, 1) = imag(sig(i));
         }
-      if(o_four.isOptionGiven())
+        if (o_four.isOptionGiven())
         {
-        double smpl = ATypeMain::aSource.getSamplingFreq();
-        PPPAxis freq(ATypeMain::aSource.size(), -smpl/2.0, smpl/2.0, PPPAxis::ATlin, PPPSPECTRCONTAINER_FREQ);
-        wavelet->evalFreqRepresentation(four, freq);
-        for(unsigned i=0; i<ATypeMain::aSource.size(); i++)
-          {
-          ATypeMain::aDest(i,chan-3) = four.getAxis(i);
-          ATypeMain::aDest(i,chan-2) = real(four(i));
-          ATypeMain::aDest(i,chan-1) = imag(four(i));
-          }
+            double smpl = ATypeMain::aSource.getSamplingFreq();
+            PPPAxis freq(ATypeMain::aSource.size(), -smpl / 2.0, smpl / 2.0, PPPAxis::ATlin,
+            PPPSPECTRCONTAINER_FREQ);
+            wavelet->evalFreqRepresentation(four, freq);
+            for (unsigned i = 0; i < ATypeMain::aSource.size(); i++)
+            {
+                ATypeMain::aDest(i, chan - 3) = four.getAxis(i);
+                ATypeMain::aDest(i, chan - 2) = real(four(i));
+                ATypeMain::aDest(i, chan - 1) = imag(four(i));
+            }
         }
-      // Information
-      strstream str;
-      str << wavelet->getInfo() << endl << ATypeMain::aDest.getInfo() << ends;
-      PPPBaseObject :: onMessage(str.str());
-      delete wavelet;
-      };
+        // Information
+        strstream str;
+        str << wavelet->getInfo() << endl << ATypeMain::aDest.getInfo() << ends;
+        PPPBaseObject::onMessage(str.str());
+        delete wavelet;
+    }
+    
+};
+// end of object
 
-  };  // end of object
-
-
-main(int  argc, char **argv)
-  {
-  gwlMain<double,gwlMainDouble> Wav("Generation of a wavelet representation","gwlWavelets","time.dat","wavelet.dat");
-  Wav.parse(argc,argv);
-  ConApplication.onMessage(ConApplication.getAppName());
-  Wav.evaluate();
-  return 0;
-  }
+main(int argc, char **argv)
+{   
+    gwlMain<double,gwlMainDouble> Wav("Generation of a wavelet representation","gwlWavelets","time.dat","wavelet.dat");
+    Wav.parse(argc,argv);
+    ConApplication.onMessage(ConApplication.getAppName());
+    Wav.evaluate();
+    return 0;
+}
 

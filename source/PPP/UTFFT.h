@@ -36,25 +36,34 @@
  *  checked with realSizeOfIn() and realSizeOfOut()
  *  Make suhre that in != out
  ***********************************************************************/
-class UTFFT {
+class UTFFT
+{
+public:
 
-  public:
-    typedef enum {C2CFORWARD, C2CBACKWARD, R2C, C2R} transtype;
-    typedef enum {CFFT, RFFT } algotype;
+    typedef enum
+    {
+        C2CFORWARD, C2CBACKWARD, R2C, C2R
+    } transtype;
+    
+    typedef enum
+    {
+        CFFT, RFFT
+    } algotype;
 
-  private:
-    double      *_in;
-    double      *_out;
-    unsigned    _n;
-    transtype   _transtype;
-    algotype  	_algotype;
-    std::string      _method;
+private:
 
-    class       FFTDATA;
-    FFTDATA     *data;
+    double *_in;
+    double *_out;
+    unsigned _n;
+    transtype _transtype;
+    algotype _algotype;
+    std::string _method;
 
-  public:
-                   
+    class FFTDATA;
+    FFTDATA *data;
+
+public:
+    
     /*
      *  Following procedures have to be realized in implementation section
      */
@@ -62,12 +71,12 @@ class UTFFT {
     /*
      *  Default contructor. If necessary, allocates FFTDATA *data variable
      */
-    UTFFT();
+    UTFFT ();
 
     /*
      *  Destructor. If necessary, destroys FFTDATA *data variable
      */
-    ~UTFFT();
+    ~UTFFT ();
 
     /*
      *  Initialization with memory allocated by user
@@ -75,68 +84,103 @@ class UTFFT {
      *  out = malloc ( realSizeOfOut() * sizeof ( double ) )
      *  If necessary, allocates FFTDATA *data variable
      */
-    bool setData(double *in, double *out);
+    bool setData (double *in, double *out);
 
     /*
      *  Calculation FFT
      */
-    bool execute(void);
+    bool execute (void);
 
     /*
      *  If FFTDATA *data variable has been allocated in setData(), then destroys FFTDATA *data variable
      */
-    bool clear(void);
+    bool clear (void);
 
     /*
      *  Pre-defined interface, do not imlement in implementation section
      */
-    inline void setType(unsigned n, transtype trans, algotype algo = CFFT) {
-      _n = n;
-      _transtype = trans;
-      _algotype = algo;
-      };
-
-    inline bool init(
-        double *in,                    // in: [re0,im0,re1,im1,.....
-        double *out,                   // out: [re0,im0,re1,im1,....
-        unsigned n, 		       // n: number of points (power of 2)
-        transtype trans = C2CFORWARD,  // trans: forward, backwart transformation
-        algotype algo = CFFT) {
-      setType(n,trans,algo);
-      return setData(in, out);
-      };
-
-    inline unsigned size(void) const { return _n; };
-    inline double * inbegin(void) const { return _in; };
-    inline double * inend(void) const { return _in + realSizeOfIn(); };
-    inline double * outbegin(void) const { return _out; };
-    inline double * outend (void) const { return _out + realSizeOfOut(); };
-    inline std::string &getMethodName(void) { return _method; };
-
-    unsigned realSizeOfIn (void) const {
-      if ( _algotype == CFFT )
+    inline void setType (unsigned n, transtype trans, algotype algo = CFFT)
+    {
+        _n = n;
+        _transtype = trans;
+        _algotype = algo;
+    }
+    
+    inline bool init (double *in,                    // in: [re0,im0,re1,im1,.....
+            double *out,                   // out: [re0,im0,re1,im1,....
+            unsigned n, 		       // n: number of points (power of 2)
+            transtype trans = C2CFORWARD,  // trans: forward, backwart transformation
+            algotype algo = CFFT)
+    {
+        setType(n, trans, algo);
+        return setData(in, out);
+    }
+    
+    inline unsigned size (void) const
+    {
+        return _n;
+    }
+    
+    inline double * inbegin (void) const
+    {
+        return _in;
+    }
+    
+    inline double * inend (void) const
+    {
+        return _in + realSizeOfIn();
+    }
+    
+    inline double * outbegin (void) const
+    {
+        return _out;
+    }
+    
+    inline double * outend (void) const
+    {
+        return _out + realSizeOfOut();
+    }
+    
+    inline std::string &getMethodName (void)
+    {
+        return _method;
+    }
+    
+    unsigned realSizeOfIn (void) const
+    {
+        if (_algotype == CFFT)
         {
-        switch (_transtype)
-          {
-          case C2CFORWARD: case C2CBACKWARD: case C2R: return 2*_n;
-          case (R2C): return _n;
-          }
+            switch (_transtype)
+            {
+            case C2CFORWARD:
+            case C2CBACKWARD:
+            case C2R:
+                return 2 * _n;
+            case (R2C):
+                return _n;
+            }
         }
-      return 0;
-      };
-
-    unsigned realSizeOfOut (void) const {
-      if ( _algotype == CFFT )
+        return 0;
+    }
+    
+    unsigned realSizeOfOut (void) const
+    {
+        if (_algotype == CFFT)
         {
-        switch (_transtype)
-          {
-          case C2CFORWARD: case C2CBACKWARD: case R2C: return 2*_n;
-          case C2R: return _n;
-          }
+            switch (_transtype)
+            {
+            case C2CFORWARD:
+            case C2CBACKWARD:
+            case R2C:
+                return 2 * _n;
+            case C2R:
+                return _n;
+            }
         }
-      return 0;
-      };
-
-  }; // end of object
+        return 0;
+    }
+    
+};
+// end of object
 
 #endif /*UTFFT_H_*/

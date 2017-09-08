@@ -25,36 +25,42 @@
  * PPPMathFunc
  ************************************************************************/
 class PPPMathFunc : public PPPBaseObject
-  {
-
-  public:
-    PPPMathFunc(void) {
-      setObjectName(PPPMATHFUNC_NAME);
-      };
-
+{
+public:
+    
+    PPPMathFunc (void)
+    {
+        setObjectName(PPPMATHFUNC_NAME);
+    }
+    
     /** Power of two **********************************************************/
-    int isPowerOfTwo(int aSize) {
-      if ( aSize < 2 )  return false;
-      if ( aSize & (aSize-1) )  return false;
-      return true;
-      };
-
+    int isPowerOfTwo (int aSize)
+    {
+        if (aSize < 2) return false;
+        if (aSize & (aSize - 1)) return false;
+        return true;
+    }
+    
     /** Computing SINC function ***********************************************/
-    double sinc(double x){
-      if(x==0) return 1.0;
-      else return sin(x)/x;
-      };
-
+    double sinc (double x)
+    {
+        if (x == 0)
+            return 1.0;
+        else
+            return sin(x) / x;
+    }
+    
     /** Factorial *************************************************************/
-    double fact(int aN) {
-      if(aN == 0 || aN == 1) return 1.0;
-      double s=1.0;
-      for(int i=1; i<=aN; i++) s*=i;
-      return s;
-      };
-
-  }; // end of object
-
-
+    double fact (int aN)
+    {
+        if (aN == 0 || aN == 1) return 1.0;
+        double s = 1.0;
+        for (int i = 1; i <= aN; i++)
+            s *= i;
+        return s;
+    }
+    
+};
+// end of object
 
 #endif

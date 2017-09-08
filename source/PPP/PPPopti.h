@@ -25,67 +25,102 @@
  * PPPOpti
  ************************************************************************/
 class PPPOpti : public PPPBaseObject
-  {
-  private:
-    bool         _isInitialized;
+{
+private:
 
-  protected:
-    unsigned     _points;           // Number of function points
-    unsigned     _fixed;            // Number of fixed parameters
-    unsigned     _calcfuncCount;    // Number of cost function calculation
-    double       _chisq;            // Current and minimal value of cost function
+    bool _isInitialized;
 
-  public:
-    typedef enum {OTleven, OTsimann} OptiType;
-    PPPVectorContainer<double>    optpar;     // Best parameter set
-    PPPVectorContainer<int>       fixpar;     // Massiv of 0 and 1 for fixed and nonfixed parameters
+protected:
 
-    PPPOpti() {
-      setObjectName(PPPOPTI_NAME);
-      _isInitialized = false;
-      };
+    unsigned _points;           // Number of function points
+    unsigned _fixed;            // Number of fixed parameters
+    unsigned _calcfuncCount;    // Number of cost function calculation
+    double _chisq;            // Current and minimal value of cost function
+    
+public:
 
-    void resize(unsigned const aPointCount, unsigned const aParamCount) {
-      _isInitialized = true;
-      _points = aPointCount;
-      optpar.resize(aParamCount);
-      fixpar.resize(aParamCount);
-      fixpar.assign(1);
-      evalFixed();
-      };
-            
-    inline bool         isInitialized() const { return _isInitialized; };
-    inline unsigned     points() const { return _points; };
-    inline unsigned     params() const { return optpar.size(); };
-    inline unsigned     fixed() const { return _fixed; };
-    inline unsigned     calcfuncCount() const { return _calcfuncCount; };
-    inline double       chisq() const { return _chisq; };
-    virtual void        setParams(PPPVectorContainer<unsigned> &aPar) = 0;
-    virtual void        setParams(PPPVectorContainer<double> &aPar) = 0;
-    virtual void        setParams(PPPMatrixContainer<double> &aPar) = 0;
-    virtual void        calcfunc(PPPVectorContainer<double> &) = 0;
-    virtual double      getcostfunc(unsigned) = 0;
-    virtual double      getder(unsigned,unsigned) = 0;
-    virtual OptiType    getOptiType() = 0;
-    virtual void        Minimize() = 0;
+    typedef enum
+    {
+        OTleven, OTsimann
+    } OptiType;
 
-    unsigned evalFixed(void) {
-      _fixed=0;
-      for(unsigned j=0;j<params();j++) if(fixpar[j]) _fixed++;
-      return _fixed;
-      };
+    PPPVectorContainer<double> optpar;     // Best parameter set
+    PPPVectorContainer<int> fixpar;     // Massiv of 0 and 1 for fixed and nonfixed parameters
+    
+    PPPOpti ()
+    {
+        setObjectName(PPPOPTI_NAME);
+        _isInitialized = false;
+    }
+    
+    void resize (unsigned const aPointCount, unsigned const aParamCount)
+    {
+        _isInitialized = true;
+        _points = aPointCount;
+        optpar.resize(aParamCount);
+        fixpar.resize(aParamCount);
+        fixpar.assign(1);
+        evalFixed();
+    }
+    
+    inline bool isInitialized () const
+    {
+        return _isInitialized;
+    }
+    
+    inline unsigned points () const
+    {
+        return _points;
+    }
+    
+    inline unsigned params () const
+    {
+        return optpar.size();
+    }
+    
+    inline unsigned fixed () const
+    {
+        return _fixed;
+    }
+    
+    inline unsigned calcfuncCount () const
+    {
+        return _calcfuncCount;
+    }
+    
+    inline double chisq () const
+    {
+        return _chisq;
+    }
+    
+    virtual void setParams (PPPVectorContainer<unsigned> &aPar) = 0;
+    virtual void setParams (PPPVectorContainer<double> &aPar) = 0;
+    virtual void setParams (PPPMatrixContainer<double> &aPar) = 0;
+    virtual void calcfunc (PPPVectorContainer<double> &) = 0;
+    virtual double getcostfunc (unsigned) = 0;
+    virtual double getder (unsigned, unsigned) = 0;
+    virtual OptiType getOptiType () = 0;
+    virtual void Minimize () = 0;
 
-    unsigned evalFixed(bool aFixPhi, bool aFixAtn, unsigned aSize) {
-      fixpar.assign(1);
-      if(aFixAtn) for(unsigned i=aSize;i<params();i++)
-        fixpar[i]=0;
-      if(aFixPhi) fixpar[0]=0;
-      return evalFixed();
-      };
-
-  }; // end of object
-
+    unsigned evalFixed (void)
+    {
+        _fixed = 0;
+        for (unsigned j = 0; j < params(); j++)
+            if (fixpar[j]) _fixed++;
+        return _fixed;
+    }
+    
+    unsigned evalFixed (bool aFixPhi, bool aFixAtn, unsigned aSize)
+    {
+        fixpar.assign(1);
+        if (aFixAtn) for (unsigned i = aSize; i < params(); i++)
+            fixpar[i] = 0;
+        if (aFixPhi) fixpar[0] = 0;
+        return evalFixed();
+    }
+    
+};
+// end of object
 
 #endif
 
- 

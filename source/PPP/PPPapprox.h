@@ -30,72 +30,86 @@
  * PPPApproximate
  ***********************************************************************/
 class PPPApproximate : public PPPBaseObject
-  {
-  public:
+{
+public:
+    
+    typedef enum
+    {
+        APTnone, APTvel, APTgauss, APTpolin, APTbspline, APTcolecole, APTtwogauss
+    } ApprType;
 
-    typedef enum {APTnone, APTvel, APTgauss, APTpolin, APTbspline, APTcolecole, APTtwogauss} ApprType;
+protected:
+    
+    ApprType _type;
+    PPPVectorContainer<double> _params;
+    double _xmin;
+    double _xmax;
 
-  protected:
+public:
+    
+    PPPApproximate (void)
+    {
+        _type = APTnone;
+        _params.resize(0);
+        setRange(0.0, 0.0);
+    }
+    
+    inline ApprType getType (void) const
+    {
+        return _type;
+    }
+    
+    inline unsigned size (void) const
+    {
+        return _params.size();
+    }
+    
+    inline double getXmin (void) const
+    {
+        return _xmin;
+    }
+    
+    inline double getXmax (void) const
+    {
+        return _xmax;
+    }
+    
+    inline PPPVectorContainer<double> & getParams (void)
+    {
+        return _params;
+    }
+    
+    inline double & operator [] (const unsigned aInd)
+    {
+        return _params[aInd];
+    }
+    
+    void setRange (double aXmin, double aXmax)
+    {
+        _xmin = aXmin;
+        _xmax = aXmax;
+    }
+    
+    virtual double Func (double) = 0;
+    virtual double FuncDivX (double) = 0;
+    virtual double FuncDivPar (double, unsigned) = 0;
+    virtual double FuncDivXPar (double, unsigned) = 0;
+    virtual const char *getInfo (void) = 0;
 
-    ApprType                    _type;
-    PPPVectorContainer<double>  _params;
-    double                      _xmin;
-    double                      _xmax;
-
-  public:
-
-    PPPApproximate(void) {
-      _type = APTnone;
-      _params.resize(0);
-      setRange(0.0, 0.0);
-      };
-
-    inline ApprType getType(void) const {
-      return _type;
-      };
-
-    inline unsigned size(void) const {
-      return _params.size();
-      }
-
-    inline double getXmin(void) const {
-      return _xmin;
-      }
-
-    inline double getXmax(void) const {
-      return _xmax;
-      }
-
-    inline PPPVectorContainer<double> & getParams(void) {
-      return _params;
-      }
-
-    inline double & operator [] ( const unsigned aInd ) {
-      return _params[aInd];
-      }
-
-    void setRange(double aXmin, double aXmax) {
-      _xmin = aXmin;
-      _xmax = aXmax;
-      }
-
-    virtual double Func(double) = 0;
-    virtual double FuncDivX(double) = 0;
-    virtual double FuncDivPar(double, unsigned) = 0;
-    virtual double FuncDivXPar(double, unsigned) = 0;
-    virtual const char *getInfo(void) = 0;
-
-    void assign(PPPApproximate *aSource) {
-      if(_type != aSource->_type) onError(PPPAPPROXIMATE_ERRVAL+string("assign"));
-      _params.assign(aSource->_params);
-      _xmin = aSource->_xmin;
-      _xmax = aSource->_xmax;
-      }
-
-    void link(PPPApproximate * aAppr) {
-      _params.link(aAppr->_params);
-      }
-      
-  };  // end of object
+    void assign (PPPApproximate *aSource)
+    {
+        if (_type != aSource->_type) onError(PPPAPPROXIMATE_ERRVAL + string("assign"));
+        _params.assign(aSource->_params);
+        _xmin = aSource->_xmin;
+        _xmax = aSource->_xmax;
+    }
+    
+    void link (PPPApproximate * aAppr)
+    {
+        _params.link(aAppr->_params);
+    }
+    
+};
+// end of object
 
 #endif
