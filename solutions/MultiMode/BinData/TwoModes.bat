@@ -1,0 +1,39 @@
+..\..\..\bin\gwlCreateAxis --outfile=TwoModesFreq.dat --count=1024 --min=9.7704E-4 --max=2047 --name="Frequency" --nomess
+
+..\..\..\bin\gwlDispModel --infile=TwoModesFreq.dat --outfile=TwoModesMod1.dat --analyt --wn=vel --wnpar=1256,-62,50 --name="1th dispersion model" --nomess
+
+..\..\..\bin\gwlDispModel --infile=TwoModesFreq.dat --outfile=TwoModesMod2.dat --analyt --wn=vel --wnpar=1275,125,150 --name="2nd dispersion model" --nomess
+
+..\..\..\bin\gwlCreateAxis --outfile=TwoModesTime.dat --count=2048 --min=0 --max=1 --name="Time" --nomess
+
+..\..\..\bin\gwlWavelets --infile=TwoModesTime.dat --outfile=TwoModesSour.dat --outtype=1 --wavelet=cauchy --wavpar=5 --time=0.2 --freq=70
+
+..\..\..\bin\gwlSignalRead --infile=TwoModesSour.dat --outfile=TwoModesSour.dat --format=ASCII --type=func --istime --name="Real part of cauchy wavelet" --nomess
+
+..\..\..\bin\gwlDiffeoDisp --infile=TwoModesSour.dat --outfile=TwoModesSig1.dat --model=TwoModesMod1.dat --step=6 --decrs=2 --dist=113 --name="1th propagation mode" --nomess
+
+..\..\..\bin\gwlDiffeoDisp --infile=TwoModesSour.dat --outfile=TwoModesSig2.dat --model=TwoModesMod2.dat --step=6 --decrs=2 --dist=113 --name="2nd propagation mode" --nomess
+
+..\..\..\bin\gwlSignalSum --infile=TwoModesSig1.dat,TwoModesSig2.dat --outfile=TwoModesSig.dat --name="Synthetic seismogram with two modes" --nomess
+
+..\..\..\bin\gwlCreateAxis --outfile=TwoModesFreq.dat --count=256 --min=1 --max=250 --name="Frequency" --nomess
+
+..\..\..\bin\gwlCwt --infile=TwoModesSig.dat --outfile=TwoModesCwt.dat --wttype=2 --freq=TwoModesFreq.dat --wavelet=morlet --wavpar=2 --name="Wavelet spectrum"
+
+..\..\..\bin\gwlConvert  --infile=TwoModesCwt.dat --outfile=TwoModesCwtC01.dat --comp=3,5 --filter=0.2 --chan=0 --name="Wavelet spectrum chan 01"
+
+..\..\..\bin\gwlConvert  --infile=TwoModesCwt.dat --outfile=TwoModesCwtC06.dat --comp=3,5 --filter=0.2 --chan=6 --name="Wavelet spectrum chan 06"
+
+..\..\..\bin\gwlCreateAxis --outfile=TwoModesVel.dat --count=256 --min=1190 --max=1450 --name="Velocity" --nomess
+
+..\..\..\bin\gwlTransFK --infile=TwoModesCwt.dat --outfile=TwoModesArg.dat --vel=TwoModesVel.dat --inter=spline --corr=arg --filter=0.1 --norm --dist=113 --name="Freauency-velocity image" --prog
+
+..\..\..\bin\gwlTransFK --infile=TwoModesCwt.dat --outfile=TwoModesCphase.dat --vel=TwoModesVel.dat --inter=spline --corr=cphase --filter=0.1 --norm --dist=113 --name="Freauency-velocity image" --prog
+
+del TwoModesFreq.dat
+del TwoModesTime.dat
+del TwoModesSig1.dat
+del TwoModesSig2.dat
+del TwoModesSour.dat
+del TwoModesVel.dat
+del TwoModesCwt.dat

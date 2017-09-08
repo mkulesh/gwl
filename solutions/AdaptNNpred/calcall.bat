@@ -1,0 +1,23 @@
+..\..\bin\gwlNNpred --infile=SynthSig1.asc --outfile=SynthSig1.dat --outtype=1 --slength=2000 --plength=200 --l3 --dim=100 --nncount=2 --pcoeff=1 --name="Time series with season dependence"
+
+..\..\bin\gwlNNpred --infile=SynthSig2.asc --outfile=SynthSig2.dat --outtype=1 --slength=201 --plength=30 --l3  --dim=15 --nncount=2 --pcoeff=1 --name="Time series with multiplicative seasonality"
+
+..\..\bin\gwlNNpred --infile=SynthSig3.asc --outfile=SynthSig3.dat --outtype=1 --slength=500 --plength=50 --l3  --dim=70 --nncount=3 --pcoeff=1 --name="High-frequency time series with multiplicative seasonality"
+
+..\..\bin\gwlNNpred --infile=ChaosSigDuffing.asc --outfile=ChaosSigDuffingL1.dat --outtype=1 --slength=1952 --plength=96 --l1 --dim=48 --nncount=2 --pcoeff=1
+
+..\..\bin\gwlNNpred --infile=ChaosSigDuffing.asc --outfile=ChaosSigDuffingL2.dat --outtype=1 --slength=1952 --plength=96 --l2 --dim=48 --nncount=2 --pcoeff=1
+
+..\..\bin\gwlNNpred --infile=ChaosSigDuffing.asc --outfile=ChaosSigDuffingL3.dat --outtype=1 --slength=1952 --plength=96 --l3 --dim=48 --nncount=2 --pcoeff=1
+
+..\..\bin\gwlNNpred --infile=ChaosSigMackeyGlass.asc --outfile=ChaosSigMackeyGlassL1.dat --outtype=1 --slength=1952 --plength=96 --l1 --dim=7 --nncount=3 --pcoeff=1
+
+..\..\bin\gwlNNpred --infile=ChaosSigMackeyGlass.asc --outfile=ChaosSigMackeyGlassL2.dat --outtype=1 --slength=1952 --plength=96 --l2 --dim=7 --nncount=3 --pcoeff=1
+
+..\..\bin\gwlNNpred --infile=ChaosSigMackeyGlass.asc --outfile=ChaosSigMackeyGlassL3.dat --outtype=1 --slength=1952 --plength=96 --l3 --dim=7 --nncount=3 --pcoeff=1
+
+..\..\bin\gwlNNpred --infile=ChaosSigIkeda.asc --outfile=ChaosSigIkedaL1.dat --outtype=1 --slength=1952 --plength=96 --l1 --dim=7 --nncount=3 --pcoeff=1
+
+..\..\bin\gwlNNpred --infile=ChaosSigIkeda.asc --outfile=ChaosSigIkedaL2.dat --outtype=1 --slength=1952 --plength=96 --l2 --dim=7 --nncount=3 --pcoeff=1
+
+..\..\bin\gwlNNpred --infile=ChaosSigIkeda.asc --outfile=ChaosSigIkedaL3.dat --outtype=1 --slength=1952 --plength=96 --l3 --dim=7 --nncount=3 --pcoeff=1
