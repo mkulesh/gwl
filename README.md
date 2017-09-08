@@ -8,6 +8,14 @@ it is up to your common sense to decide whether you want to comply with this req
 If you want to acknowledge GWL, please cite [following paper](http://www.sciencedirect.com/science/article/pii/S0098300408001568): 
 M.Kulesh, M.Holschneider, M.S.Diallo (2008) Geophysical wavelet library: Applications of the continuous wavelet transform to the polarization and dispersion analysis of signals. Computers & Geosciences. Volume 34, Issue 12.
 
+## Supported platforms
+Currently, GWL has been tested on following platforms
+* gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-4)
+* gcc (GCC) 6.4.1 20170727 (Red Hat 6.4.1-1)
+
+## How to build
+See Wiki page [How to build and test GWL](https://github.com/mkulesh/gwl/wiki/GWL-Home-Page#how-to-build-and-test-gwl)
+
 ## License
 
 This software is published under the *GNU General Public License, Version 3*
@@ -26,8 +34,3 @@ This software depends or includes the following third-party libraries or code fr
 * [ANSI C command line parser Argtable2](http://argtable.sourceforge.net/)
 * [C subroutine library for computing the discrete Fourier transform FFTW](http://www.fftw.org/)
 * [A graphic extension to the Qt GUI application framework QWT](https://sourceforge.net/projects/qwt/)
-
-## Supported platforms
-Currently, GWL has been tested on following platforms
-* gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-4)
-
