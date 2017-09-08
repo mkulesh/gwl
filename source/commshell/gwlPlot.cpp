@@ -69,8 +69,7 @@ private slots:
                 "About gwlPlot",
                 "gwlPlot is an interactive plotting tool for GWL library\n"
                 "Authors: Matthias Holschneider and Mikhail Kulesh\n"
-                "email: matthias.holschneider@gmail.com mkulesh@math.uni-potsdam.de\n"
-                "Copyright 2007-2009 University of Potsdam\n");
+                "email: matthias.holschneider@gmail.com mikhail.kulesh@gmail.com");
     };
 
     void slotAboutQt ()

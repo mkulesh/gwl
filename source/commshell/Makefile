@@ -58,7 +58,7 @@ gwlPlot.o : gwlPlot.cpp
 	$(UP_CC) -c -g -Wno-deprecated gwlPlot.cpp $(CINC) -I $(QTDIR)/include
 
 gwlPlot : gwlPlot.o
-	$(UP_CC) -g  $@.o $(COPT) -L $(PWD)/../lib -L $(QTDIR)/lib -largtable2 -lfftw3 -lqwt -o $@
+	$(UP_CC) -g  $@.o $(COPT) -L $(PWD)/../lib -L $(QTDIR)/lib -largtable2 -lfftw3 -lqwt -lqt-mt -o $@
 
 .cpp.o :
 	$(UP_CC) -c -Wno-deprecated $< $(CINC)

@@ -25,7 +25,7 @@
 #include <qwt_plot_layout.h>
 #include <qwt_plot_canvas.h>
 
-#include <vector.h>
+#include <vector>
 
 class UTMatrixOfQwtPlot : public QWidget
 {

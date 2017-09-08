@@ -1,9 +1,9 @@
 echo ---------------------------------------------------------
-../../bin/gwlCreateAxis --scale=lin --count=128 --min=0 --max=127\
+../../bin/gwlCreateAxis --scale=lin --count=512 --min=0 --max=127\
    --outfile=exmDeltaTime.dat --outtype=2 --name="Time"
 
 echo ---------------------------------------------------------
-../../bin/gwlCreateAxis --scale=lin --count=128 --min=0.01 --max=1\
+../../bin/gwlCreateAxis --scale=lin --count=512 --min=0.01 --max=1\
    --outfile=exmDeltaFreq.dat --outtype=2 --name="Frequency"
 ../../bin/gwlConvert --infile=exmDeltaFreq.dat\
    --outfile=exmDeltaFreqASC.dat --outtype=1 --nomess
